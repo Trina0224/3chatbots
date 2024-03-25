@@ -23,10 +23,7 @@ body, html {
     box-sizing: border-box;
 }
 
-.top-left {
-    background-color: #f9f9f9;
-    justify-content: center;
-}
+
 
 .top-right {
     background-color: #d7d7d7;
@@ -66,3 +63,26 @@ input[type="submit"] {
     flex-direction: column;
     align-items: start; /* Aligns content to the start of the flex container */
 }
+
+.top-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Aligns the input area to the bottom */
+}
+
+.old-inputs {
+    overflow-y: auto; /* Enables vertical scrolling */
+    height: calc(100% - 100px); /* Adjust based on your layout */
+    margin: 10px 0;
+    padding: 5px;
+    border: 1px solid #ccc; /* Visual boundary for the old inputs */
+}
+
+#inputData {
+    width: calc(100% - 20px); /* Adjust the width to fit inside the top-left area */
+    margin: 5px 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    resize: vertical; /* Allows vertical resizing */
+}
+

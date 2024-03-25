@@ -8,13 +8,26 @@
 </head>
 <body>
     <div class="container">
+        <!--
         <div class="top-left">
             <input type="text" id="inputData" placeholder="Type here...">
             <button onclick="sendData(); sendDataToBottomLeft()">Send</button>
         </div>
+        -->
+        <div class="top-left">
+            <div id="oldInputs" class="old-inputs"></div> <!-- Area for displaying old inputs -->
+            <textarea id="inputData" rows="4" placeholder="Enter your message..."></textarea>
+            <button onclick="sendData(); sendDataToBottomLeft()">Send</button>
+        </div>
+        
+        <!--
         <div class="top-right" id="chatbotResponse">Top Right Content</div>
         <div class="bottom-left" id="bottomLeft">Bottom Left Content</div>
         <div class="bottom-right" id="bottomRight">Bottom Right Content</div>
+        -->
+        <div class="top-right" id="chatbotResponse"></div>
+        <div class="bottom-left" id="bottomLeft"></div>
+        <div class="bottom-right" id="bottomRight"></div>
     </div>
 </body>
 </html>

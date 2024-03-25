@@ -1,16 +1,42 @@
 // Assume we have an array to store the message history
 let messageHistory = [];
 let bottomLeftMessageHistory = [];
+let inputsHistory = [];
 
 
 async function sendData() {
-    const input = document.getElementById('inputData').value;
+    //const input = document.getElementById('inputData').value;
+    const inputElement = document.getElementById('inputData');
+    const oldInputsElement = document.getElementById('oldInputs');
+    const newInput = inputElement.value.trim();
+    
     //const bottomLeft = document.getElementById('bottomLeft').textContent;
     const bottomLeftLastTwo = bottomLeftMessageHistory.slice(-2).join(' ');
     const bottomRight = document.getElementById('bottomRight').textContent;
     
-    const message = `${input} ${bottomLeftLastTwo} ${bottomRight}`;
+    const message = `${newInput} ${bottomLeftLastTwo} ${bottomRight}`;
     console.log(message);
+
+    if (newInput) {
+        // Add new input to the message history
+        inputsHistory.push(newInput);
+        
+        // Update the old inputs display
+        const newInputDiv = document.createElement('div');
+        newInputDiv.textContent = newInput;
+        //oldInputsElement.prepend(newInputDiv); // Adds the new input at the top of the old inputs area
+        oldInputsElement.appendChild(newInputDiv); // Adds the new input at the bottom of the old inputs area
+
+        // Clear the text area for the next input
+        inputElement.value = '';
+        
+        // Keep only the latest 2 entries from the bottom left (if needed for another function)
+        // const latestTwoInputs = messageHistory.slice(-2);
+
+        // Scroll to the top to show the most recent old input
+        //oldInputsElement.scrollTop = 0;
+        oldInputsElement.scrollTop = oldInputsElement.scrollHeight;
+    }
 
     try {
         const response = await fetch('/chat', {
@@ -39,12 +65,13 @@ function updateTopRightArea() {
 }
 
 async function sendDataToBottomLeft() {
-    const input = document.getElementById('inputData').value;
+    //const input = document.getElementById('inputData').value;
+    const latestInput = inputsHistory[inputsHistory.length - 1];
     // Assuming you're using messageHistory for the top-right area responses
     const topRightLastTwoResponses = messageHistory.slice(-2).join(' '); 
     const bottomRight = document.getElementById('bottomRight').textContent;
     
-    const message = `${input} ${topRightLastTwoResponses} ${bottomRight}`;
+    const message = `${latestInput} ${topRightLastTwoResponses} ${bottomRight}`;
     console.log(message);
 
     try {
