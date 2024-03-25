@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot Interface</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="top-left">
+            <input type="text" id="inputData" placeholder="Type here...">
+            <button onclick="sendData(); sendDataToBottomLeft()">Send</button>
+        </div>
+        <div class="top-right" id="chatbotResponse">Top Right Content</div>
+        <div class="bottom-left" id="bottomLeft">Bottom Left Content</div>
+        <div class="bottom-right" id="bottomRight">Bottom Right Content</div>
+    </div>
+</body>
+</html>
