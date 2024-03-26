@@ -40,4 +40,4 @@ node .\server.js
 
 
 ## Demo  
-![Demo 1](pics\Screenshot 2024-03-25 223355.png)  
+![Demo 1](https://github.com/Trina0224/3chatbots/blob/main/pics/Screenshot%202024-03-25%20223355.png)  
