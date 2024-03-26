@@ -1,7 +1,7 @@
 # 3chatbots
  shabe shabe no robots
 
-At the current stage, we can have humans, ChatGPT, Gemini, and Claude chat together at the four corners of the screen.  
+At the current stage, we can have humans, ChatGPT, Gemini, and Claude chat together on the four corners of the screen.  
 現在の段階では、画面の四隅で人間、ChatGPT、Gemini、Claudeが一緒にチャットできます。  
 目前進度，可以在畫面上四個角落分別讓人類，ChatGPT, Gemini與Claude一起聊天。請幫我翻譯成英文與日文  
 
@@ -34,9 +34,11 @@ node .\server.js
 
 ## To Do  
 1. Control the talking sequence.  
-2. Can support markdown format.  
-3. Can upload picutre.  
-4. Can support hyperlink.  
+2. Clean codes.  
+3. Provide personality to each of the bot.  
+4. Can support markdown format.  
+5. Can upload picutre.  
+6. Can support hyperlink.  
 
 
 ## Demo  
