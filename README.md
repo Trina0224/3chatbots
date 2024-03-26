@@ -39,6 +39,8 @@ node .\server.js
 4. Can support markdown format.  
 5. Can upload picutre.  
 6. Can support hyperlink.  
+7. Deco the html and css.  
+
 
 
 ## Demo  
