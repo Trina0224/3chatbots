@@ -23,22 +23,13 @@ body, html {
     box-sizing: border-box;
 }
 
-
-
-.top-right {
+.top-right, .bottom-left, .bottom-right {
     background-color: #d7d7d7;
     overflow-y: auto; /* Enables vertical scrolling */
     padding: 10px; /* Optional, for spacing */
+    display: flex;
     flex-direction: column; /* Adjusts flex children to stack vertically */
-}
-
-.bottom-left, .bottom-right {
-    justify-content: center;
-    background-color: #d7d7d7;
-}
-
-.bottom-right {
-    background-color: #c6c6c6;
+    align-items: start; /* Aligns content to the start of the flex container for bottom areas */
 }
 
 form {
@@ -53,15 +44,6 @@ input[type="text"], input[type="submit"] {
 
 input[type="submit"] {
     cursor: pointer;
-}
-
-.bottom-left {
-    background-color: #d7d7d7;
-    overflow-y: auto; /* Enables vertical scrolling */
-    padding: 10px; /* Optional, for spacing */
-    display: flex;
-    flex-direction: column;
-    align-items: start; /* Aligns content to the start of the flex container */
 }
 
 .top-left {
@@ -85,4 +67,3 @@ input[type="submit"] {
     border: 1px solid #ccc;
     resize: vertical; /* Allows vertical resizing */
 }
-

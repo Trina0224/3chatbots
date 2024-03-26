@@ -55,7 +55,7 @@ async function sendData() {
         console.error('Failed to communicate with the chatbot backend.', error);
     }
 }
-
+/*
 function updateTopRightArea() {
     const chatbotResponseArea = document.getElementById('chatbotResponse');
     chatbotResponseArea.innerHTML = messageHistory.join('<br><br>'); // Join messages with breaks
@@ -63,6 +63,14 @@ function updateTopRightArea() {
     // Scroll to the bottom of the area to show the latest message
     chatbotResponseArea.scrollTop = chatbotResponseArea.scrollHeight;
 }
+*/
+function updateTopRightArea() {
+    const chatbotResponseArea = document.getElementById('chatbotResponse');
+    // Prepend "ChatGPT: " to each message
+    chatbotResponseArea.innerHTML = messageHistory.map(msg => `ChatGPT: ${msg}`).join('<br><br>');
+    chatbotResponseArea.scrollTop = chatbotResponseArea.scrollHeight;
+}
+
 
 async function sendDataToBottomLeft() {
     //const input = document.getElementById('inputData').value;
@@ -83,7 +91,9 @@ async function sendDataToBottomLeft() {
         const data = await response.json();
 
         //Update to apped new message to the history
-        const newMessage = data.text;
+        //const newMessage = data.text;
+        //console.log('Got from Gemini:', newMessage);
+        const newMessage = `Gemini: ${data.text}`;
         bottomLeftMessageHistory.push(newMessage);
 
         updateBottomLeftArea();
@@ -108,6 +118,46 @@ function updateBottomLeftArea() {
     
     // Scroll to the bottom of the area to show the latest message
     bottomLeftArea.scrollTop = bottomLeftArea.scrollHeight;
+}
+/*
+function updateBottomLeftArea() {
+    const bottomLeftArea = document.getElementById('bottomLeft');
+    // Prepend "Gemini: " to each message
+    bottomLeftArea.innerHTML = bottomLeftMessageHistory.map(msg => `Gemini: ${msg}`).join('<br><br>');
+    bottomLeftArea.scrollTop = bottomLeftArea.scrollHeight;
+}
+*/
+
+
+
+async function sendDataToBottomRight() {
+    const latestInput = inputsHistory.slice(-1).join(' '); // Gets the latest input
+    const topRightLastTwoResponses = messageHistory.slice(-2).join(' '); 
+    const bottomLeftLastTwoResponses = bottomLeftMessageHistory.slice(-2).join(' ');
+    
+    const message = `${latestInput} ${topRightLastTwoResponses} ${bottomLeftLastTwoResponses}`;
+    console.log('Sending to Claude:', message);
+
+    try {
+        const response = await fetch('/chatWithClaude', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ message }),
+        });
+        const data = await response.json();
+        // Adjust the path to access the nested text based on the Claude response structure
+        //const claudeResponseText = data.msg.content.map(item => item.text).join('\n');
+        const claudeResponseText = `Claude: ${data.msg.content.map(item => item.text).join('\n')}`;
+        updateBottomRightArea(claudeResponseText); // Update the bottom-right area with the response
+    } catch (error) {
+        console.error('Failed to communicate with the server.', error);
+    }
+}
+
+function updateBottomRightArea(text) {
+    const bottomRightArea = document.getElementById('bottomRight');
+    bottomRightArea.innerHTML += `${text}<br><br>`; // Append new message
+    bottomRightArea.scrollTop = bottomRightArea.scrollHeight; // Scroll to the latest message
 }
 
 
