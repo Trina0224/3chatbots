@@ -55,3 +55,6 @@ English:
 
 Chinese:    
 ![Demo 2](https://github.com/Trina0224/3chatbots/blob/main/pics/Screenshot%202024-03-26%20004357.png)
+
+Japanese:
+![Demo 3]()
