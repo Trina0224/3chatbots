@@ -23,7 +23,7 @@ const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_API_KEY });
 app.use(express.json());
 app.use(express.static('public'));
 
-app.post('/chat', async (req, res) => {
+/*app.post('/chat', async (req, res) => {
     try {
         const params = {
             model: 'gpt-3.5-turbo', // Adjust model as needed
@@ -39,6 +39,34 @@ app.post('/chat', async (req, res) => {
         res.status(500).send('Error communicating with ChatGPT API');
     }
 });
+*/
+app.post('/chat', async (req, res) => {
+    try {
+        // Assuming the textarea content is sent in the request body under "trait1"
+        const systemMessageContent = req.body.trait1;
+        console.log(systemMessageContent);
+        const params = {
+            model: 'gpt-3.5-turbo', // Adjust model as needed
+            messages: [
+                {
+                    role: 'system',
+                    content: systemMessageContent // Read from the HTML textarea
+                },
+                {
+                    role: 'user', 
+                    content: req.body.message // Ensure this matches the incoming request
+                }
+            ],
+        };
+        const chatCompletion = await openai.chat.completions.create(params);
+        res.json(chatCompletion);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error communicating with ChatGPT API');
+    }
+});
+
+
 
 
 app.post('/generateWithGemini', async (req, res) => {

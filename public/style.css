@@ -67,3 +67,20 @@ input[type="submit"] {
     border: 1px solid #ccc;
     resize: vertical; /* Allows vertical resizing */
 }
+
+.personality-container {
+    margin-top: 20px; /* Adds space above the personality container */
+    border: 2px solid #000; /* Creates a solid border */
+    padding: 20px; /* Adds padding inside the container */
+}
+
+.input-group label {
+    display: block; /* Makes the label display on its own line */
+    margin-top: 10px; /* Adds space above the label */
+    font-weight: bold; /* Makes the label text bold */
+}
+
+.input-group textarea {
+    width: calc(100% - 20px); /* Ensures the textarea fits its container, accounting for padding */
+    margin-top: 5px; /* Adds space above the textarea */
+}

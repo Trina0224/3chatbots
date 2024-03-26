@@ -42,7 +42,11 @@ async function sendData() {
         const response = await fetch('/chat', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ message }),
+            //body: JSON.stringify({ message }),
+            body: JSON.stringify({
+                message: message,
+                trait1: document.getElementById('trait1').value // Gets the content of the textarea
+            }),
         });
         const data = await response.json();
         
@@ -78,6 +82,8 @@ async function sendDataToBottomLeft() {
     // Assuming you're using messageHistory for the top-right area responses
     const topRightLastTwoResponses = messageHistory.slice(-2).join(' '); 
     const bottomRight = document.getElementById('bottomRight').textContent;
+    const trait2 = document.getElementById('trait2').value;
+
     
     const message = `${latestInput} ${topRightLastTwoResponses} ${bottomRight}`;
     console.log(message);
@@ -86,7 +92,7 @@ async function sendDataToBottomLeft() {
         const response = await fetch('/generateWithGemini', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ message }),
+            body: JSON.stringify({ message, trait2 }),
         });
         const data = await response.json();
 
