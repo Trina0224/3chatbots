@@ -3,7 +3,7 @@
 
 At the current stage, we can have humans, ChatGPT, Gemini, and Claude chat together on the four corners of the screen.  
 現在の段階では、画面の四隅で人間、ChatGPT、Gemini、Claudeが一緒にチャットできます。  
-目前進度，可以在畫面上四個角落分別讓人類，ChatGPT, Gemini與Claude一起聊天。請幫我翻譯成英文與日文  
+目前進度，可以在畫面上四個角落分別讓人類，ChatGPT, Gemini與Claude一起聊天。
 
 
 
