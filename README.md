@@ -35,7 +35,7 @@ node .\server.js
 ## To Do  
 1. Control the talking sequence.  
 2. Clean codes.  
-3. Provide personality to each of the bot.  
+3. Provide personality to each of the bots. Need to work on Claude.    
 4. Can support markdown format.  
 5. Can upload picutre.  
 6. Can support hyperlink.  
