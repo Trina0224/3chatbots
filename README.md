@@ -41,10 +41,10 @@ node .\server.js
 6. Can support hyperlink.  
 7. Deco the html and css.  
 8. Use timer to keep the discussion.  
- 
+
 
 ## BUG  
-1. Empty textarea at top-eft will trigger 500 at Gemini section.  
+1. Empty textarea at top-left will trigger 500 at Gemini section.  
 
 
 
