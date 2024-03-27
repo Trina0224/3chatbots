@@ -44,7 +44,7 @@ app.post('/chat', async (req, res) => {
     try {
         // Assuming the textarea content is sent in the request body under "trait1"
         const systemMessageContent = req.body.trait1;
-        console.log(systemMessageContent);
+        //console.log(systemMessageContent);
         const params = {
             model: 'gpt-3.5-turbo', // Adjust model as needed
             messages: [
@@ -59,6 +59,7 @@ app.post('/chat', async (req, res) => {
             ],
         };
         const chatCompletion = await openai.chat.completions.create(params);
+        console.log('Received from ChatGPT:', chatCompletion);
         res.json(chatCompletion);
     } catch (error) {
         console.error(error);
@@ -89,6 +90,7 @@ app.post('/generateWithGemini', async (req, res) => {
         const modelResponsePart = req.body.trait2;
 
         // For a text-only input, assuming you're using a model similar to 'gemini-pro'
+        //gemini-1.5-pro-latest , gemini-pro
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
         // Start a chat session with the model, including both the user's prompt and a model's placeholder response in the history
@@ -116,6 +118,7 @@ app.post('/generateWithGemini', async (req, res) => {
         const text = await response.text(); // Assuming response.text() returns a promise
         
         // Respond to the client with the model's text response
+        console.log('Received from Gemini:', text);
         res.json({ text });
     } catch (error) {
         console.error('Failed to communicate with Gemini API.', error);
@@ -136,7 +139,8 @@ app.post('/chatWithClaude', async (req, res) => {
             max_tokens: 1024,
             messages: [{ role: "user", content: inputMessage }],
         });
-        console.log(msg); // Log the message for debugging
+        //console.log(msg); // Log the message for debugging
+        console.log('Received from Claude:', msg);
         // Respond with the Claude message. Adjust according to the actual structure of `msg`
         //res.json({ text: msg.responses[0].content });
         res.json({ msg });

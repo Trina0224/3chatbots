@@ -15,7 +15,8 @@ async function sendData() {
     const bottomRight = document.getElementById('bottomRight').textContent;
     
     const message = `${newInput} ${bottomLeftLastTwo} ${bottomRight}`;
-    console.log(message);
+    //console.log(message);
+    console.log('Sending to ChatGPT:', message);
 
     if (newInput) {
         // Add new input to the message history
@@ -86,7 +87,8 @@ async function sendDataToBottomLeft() {
 
     
     const message = `${latestInput} ${topRightLastTwoResponses} ${bottomRight}`;
-    console.log(message);
+    //console.log(message);
+    console.log('Sending to Gemini:', message);
 
     try {
         const response = await fetch('/generateWithGemini', {

@@ -45,6 +45,8 @@ node .\server.js
 
 ## BUG  
 1. Empty textarea at top-left will trigger 500 at Gemini section.  
+2. Gemini has limitaion. Have to wait for the pay as you go API Key.  
+
 
 
 
