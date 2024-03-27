@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3000;
 const openai = new OpenAI({ apiKey: process.env.CHATGPT_API_KEY });
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+//const model = genAI.getGenerativeModel({ model: "gemini-pro"});
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_API_KEY });
 
@@ -68,7 +68,7 @@ app.post('/chat', async (req, res) => {
 
 
 
-
+/*
 app.post('/generateWithGemini', async (req, res) => {
     try {
         const prompt = req.body.message;
@@ -82,13 +82,57 @@ app.post('/generateWithGemini', async (req, res) => {
         res.status(500).send('Error communicating with Gemini API');
     }
 });
+*/
+app.post('/generateWithGemini', async (req, res) => {
+    try {
+        const userPrompt = req.body.message;
+        const modelResponsePart = req.body.trait2;
+
+        // For a text-only input, assuming you're using a model similar to 'gemini-pro'
+        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+        // Start a chat session with the model, including both the user's prompt and a model's placeholder response in the history
+        const chat = model.startChat({
+            history: [
+                {
+                    role: "user",
+                    parts: [{ text: userPrompt }],
+                },
+                {
+                    role: "model",
+                    parts: [{ text: modelResponsePart }], // This is a placeholder; adjust as needed.
+                },
+            ],
+            generationConfig: {
+                maxOutputTokens: 100, // Adjust based on your requirements
+            },
+        });
+
+        // Send a message to the model and wait for its response
+        // It's important to ensure that the logic of your application correctly handles this "model" role response,
+        // especially since this is just a placeholder and may not reflect actual use.
+        const result = await chat.sendMessage(userPrompt);
+        const response = await result.response;
+        const text = await response.text(); // Assuming response.text() returns a promise
+        
+        // Respond to the client with the model's text response
+        res.json({ text });
+    } catch (error) {
+        console.error('Failed to communicate with Gemini API.', error);
+        res.status(500).send('Error communicating with Gemini API');
+    }
+});
+
+
 
 // Endpoint for chatting with Claude
 app.post('/chatWithClaude', async (req, res) => {
     const inputMessage = req.body.message;
+    const personalityString = req.body.trait3;
     try {
         const msg = await anthropic.messages.create({
             model: "claude-3-opus-20240229",
+            system: personalityString,
             max_tokens: 1024,
             messages: [{ role: "user", content: inputMessage }],
         });

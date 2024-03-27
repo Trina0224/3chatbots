@@ -140,6 +140,8 @@ async function sendDataToBottomRight() {
     const latestInput = inputsHistory.slice(-1).join(' '); // Gets the latest input
     const topRightLastTwoResponses = messageHistory.slice(-2).join(' '); 
     const bottomLeftLastTwoResponses = bottomLeftMessageHistory.slice(-2).join(' ');
+
+    const trait3 = document.getElementById('trait3').value;
     
     const message = `${latestInput} ${topRightLastTwoResponses} ${bottomLeftLastTwoResponses}`;
     console.log('Sending to Claude:', message);
@@ -148,7 +150,7 @@ async function sendDataToBottomRight() {
         const response = await fetch('/chatWithClaude', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ message }),
+            body: JSON.stringify({ message, trait3 }),
         });
         const data = await response.json();
         // Adjust the path to access the nested text based on the Claude response structure
