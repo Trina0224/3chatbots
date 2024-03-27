@@ -3,6 +3,7 @@ let messageHistory = [];
 let bottomLeftMessageHistory = [];
 let inputsHistory = [];
 
+//const marked = require('marked');
 
 async function sendData() {
     //const input = document.getElementById('inputData').value;
@@ -53,6 +54,7 @@ async function sendData() {
         
         // Update to append new message to the history
         const newMessage = data.choices[0].message.content;
+        //var newMessage2 = marked(newMessage); //change to markdown format.
         messageHistory.push(newMessage); // Store the new message in history
         
         updateTopRightArea(); // Call function to update the display
@@ -102,6 +104,7 @@ async function sendDataToBottomLeft() {
         //const newMessage = data.text;
         //console.log('Got from Gemini:', newMessage);
         const newMessage = `Gemini: ${data.text}`;
+        //var newMessage2 = marked(newMessage);
         bottomLeftMessageHistory.push(newMessage);
 
         updateBottomLeftArea();
@@ -158,6 +161,7 @@ async function sendDataToBottomRight() {
         // Adjust the path to access the nested text based on the Claude response structure
         //const claudeResponseText = data.msg.content.map(item => item.text).join('\n');
         const claudeResponseText = `Claude: ${data.msg.content.map(item => item.text).join('\n')}`;
+        //var claudeResponseText2 = marked(claudeResponseText);
         updateBottomRightArea(claudeResponseText); // Update the bottom-right area with the response
     } catch (error) {
         console.error('Failed to communicate with the server.', error);
