@@ -1,6 +1,8 @@
 require('dotenv').config();
 //import OpenAI from 'openai';
 const OpenAI = require('openai');
+//const marked = require('marked');
+
 
 //import Gemini
 const { GoogleGenerativeAI } = require("@google/generative-ai");
@@ -106,7 +108,7 @@ app.post('/generateWithGemini', async (req, res) => {
                 },
             ],
             generationConfig: {
-                maxOutputTokens: 100, // Adjust based on your requirements
+                maxOutputTokens: 1024, // Adjust based on your requirements
             },
         });
 
@@ -119,6 +121,7 @@ app.post('/generateWithGemini', async (req, res) => {
         
         // Respond to the client with the model's text response
         console.log('Received from Gemini:', text);
+        //const text2 = marked(text);
         res.json({ text });
     } catch (error) {
         console.error('Failed to communicate with Gemini API.', error);
