@@ -4,6 +4,8 @@ let bottomLeftMessageHistory = [];
 let inputsHistory = [];
 
 //const marked = require('marked');
+//import marked from 'marked';
+
 
 async function sendData() {
     //const input = document.getElementById('inputData').value;
