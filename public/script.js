@@ -3,8 +3,12 @@ let messageHistory = [];
 let bottomLeftMessageHistory = [];
 let inputsHistory = [];
 
-//const marked = require('marked');
-//import marked from 'marked';
+function processAndDisplayData() {
+    // Call existing functions to handle various tasks
+    sendData();
+    sendDataToBottomLeft();
+    sendDataToBottomRight();
+}
 
 
 async function sendData() {

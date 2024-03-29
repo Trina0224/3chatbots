@@ -3,36 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Chatbot Interface</title>
+    <!-- Favicon for various devices, consider specifying sizes for optimization -->
     <link rel="icon" href="favicon_io/favicon-32x32.png" type="image/png">
+    <link rel="apple-touch-icon" href="favicon_io/apple-touch-icon.png" type="image/png">
     <link rel="stylesheet" href="style.css">
-    
+    <!-- Defer ensures script runs after the document has been parsed -->
     <script defer src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-
-
+    <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
+
+    <!-- Landing Page Section -->
+    <div class="landing-page">
+        <h1>Welcome to Our Chatbot Interface</h1>
+        <p>Experience a new level of digital conversation with our advanced chatbot technology.</p>
+        <a href="#description-section" class="btn-start">Get Started</a>
+    </div>
+    
     <div class="container">
-        <!--
         <div class="top-left">
-            <input type="text" id="inputData" placeholder="Type here...">
-            <button onclick="sendData(); sendDataToBottomLeft()">Send</button>
-        </div>
-        -->
-        <div class="top-left">
-            <div id="oldInputs" class="old-inputs"></div> <!-- Area for displaying old inputs -->
+            <div id="oldInputs" class="old-inputs"></div> <!-- Display area for old inputs -->
             <textarea id="inputData" rows="4" placeholder="Enter your message..."></textarea>
-        <!--    <button onclick="sendData(); sendDataToBottomLeft(); sendDataToBottomRight()">Send</button>
-            -->
-            <button onclick="sendData(); sendDataToBottomLeft(); sendDataToBottomRight()">Send</button>
+            <button onclick="processAndDisplayData()">Send</button>
+
+            <!--<button onclick="sendData(); sendDataToBottomLeft(); sendDataToBottomRight()">Send</button> -->
         </div>
         
-        <!--
-        <div class="top-right" id="chatbotResponse">Top Right Content</div>
-        <div class="bottom-left" id="bottomLeft">Bottom Left Content</div>
-        <div class="bottom-right" id="bottomRight">Bottom Right Content</div>
-        -->
+        <!-- Placeholder divs for chatbot response and other content -->
         <div class="top-right" id="chatbotResponse"></div>
         <div class="bottom-left" id="bottomLeft"></div>
         <div class="bottom-right" id="bottomRight"></div>
@@ -53,6 +50,26 @@
             <textarea id="trait3" name="trait3" rows="4">A warrior-type man, handsome not only in intellect but also proficient in sports and adventure. He engages in discussions and activities when appropriate, preferring to simplify problems or find shortcuts. His other half is his childhood friend Tifa, a beautiful girl who is also skilled in combat.</textarea>
         </div>
     </div>
+    
+    <!-- Description Section -->
+    <div class="description-container" id="description-section">
+        <h2>Instructions</h2>
+        <p id="description1">Step.1 Please fill in the personality traits or background information you would like to assign to three robots. You can fill in anything you like.</p>
+        <p id="description2">Step.2 Please type the topic or greeting you would like to start with in the 'Enter your message...' box in the top left corner. After typing, click the 'Send' button. If you do not want to change the topic or interject, you can simply click 'Send' without entering any text."</p>
+        <!-- Add more paragraphs as needed for additional descriptions -->
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Hypothesis Inc. ART-Studio. All rights reserved.</p>
+            <p>Contact us at <a href="mailto:kozakurayuki@gmail.com">kozakurayuki@gmail.com</a></p>
+            <!-- Add more footer content here as needed -->
+        </div>
+    </footer>
+    
+</body>
+</html>
 
 </body>
 </html>
