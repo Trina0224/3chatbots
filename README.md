@@ -37,6 +37,8 @@ node .\server.js
 ##  Note  
 03/24/2024 Initial Draft.  
 03/25/2024 Integrated Claude.  
+03/30/2024 Fixed some issues and posted to X for sharing.  
+
 
 ## To Do  
 1. ~Control the talking sequence.~  
@@ -47,7 +49,7 @@ node .\server.js
 6. Can support a hyperlink.  
 7. Deco the html and css.  
 8. Use timer to keep the discussion.  
-9. white out history and hightlight current messages.  
+9. ~white out history and hightlight current messages.~  
 
 
 ## BUG  
