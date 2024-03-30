@@ -6,7 +6,34 @@ let inputsHistory = [];
 let bottomRightMessageHistory = [];
 let sortedBotsByOutputLength = [];
 
+/*
 async function processAndDisplayData() {
+    // Capture the user input from the text area.
+    const inputElement = document.getElementById('inputData');
+    const oldInputsElement = document.getElementById('oldInputs');
+    const newInput = inputElement.value.trim();
+
+    // Check if there is a new input and prepend "Human: " to it before adding to the inputsHistory array.
+    if (newInput) {
+        const formattedInput = "Human: " + newInput;
+        inputsHistory.push(formattedInput); // Add the formatted input to the history.
+
+        // Clear the text area for the next input.
+        inputElement.value = '';
+
+        // Update the oldInputs display using the inputsHistory array.
+        oldInputsElement.innerHTML = ''; // Clear the display before repopulating.
+        inputsHistory.forEach(input => {
+            const inputDiv = document.createElement('div');
+            inputDiv.textContent = input;
+            oldInputsElement.appendChild(inputDiv);
+        });
+
+        // Scroll to the bottom of the oldInputs area to show the most recent input.
+        oldInputsElement.scrollTop = oldInputsElement.scrollHeight;
+    }
+
+
     await compareAndSortOutputLengths();
 
     // Assuming compareAndSortOutputLengths now updates a global sorted array named sortedBotsByOutputLength
@@ -26,13 +53,62 @@ async function processAndDisplayData() {
         }
     }
 }
+*/
+async function processAndDisplayData() {
+    const inputElement = document.getElementById('inputData');
+    const oldInputsElement = document.getElementById('oldInputs');
+    let newInput = inputElement.value.trim();
+
+    // Check if newInput is empty and adjust accordingly
+    if (!newInput) {
+        newInput = "Human: (say nothing)"; // Specific string for empty input
+    } else {
+        newInput = "Human: " + newInput; // Prepend "Human: " to non-empty input
+    }
+
+    // Add the newInput to the inputsHistory array regardless of its state
+    inputsHistory.push(newInput);
+
+    // Clear the textarea
+    inputElement.value = '';
+
+    // Update the display based on the inputsHistory array
+    oldInputsElement.innerHTML = ''; // Clear current display
+    inputsHistory.forEach(input => {
+        const inputDiv = document.createElement('div');
+        inputDiv.textContent = input;
+        oldInputsElement.appendChild(inputDiv);
+    });
+
+    // Ensure the latest input is visible
+    oldInputsElement.scrollTop = oldInputsElement.scrollHeight;
+
+    // Continue with the rest of the processing
+    await compareAndSortOutputLengths();
+    for (let bot of sortedBotsByOutputLength) {
+        switch (bot.name) {
+            case "ChatGPT":
+                await sendData();
+                break;
+            case "Gemini":
+                await sendDataToBottomLeft();
+                break;
+            case "Claude":
+                await sendDataToBottomRight();
+                break;
+            default:
+                console.error("Unknown bot:", bot.name);
+        }
+    }
+}
+
 
 async function sendData() {
     //const input = document.getElementById('inputData').value;
-    const inputElement = document.getElementById('inputData');
-    const oldInputsElement = document.getElementById('oldInputs');
-    const newInput = inputElement.value.trim();
-    
+    //const inputElement = document.getElementById('inputData');
+    //const oldInputsElement = document.getElementById('oldInputs');
+    //const newInput = inputElement.value.trim();
+    const newInput = inputsHistory.length > 0 ? inputsHistory[inputsHistory.length - 1] : '';
     //const bottomLeft = document.getElementById('bottomLeft').textContent;
     const bottomLeftLastTwo = bottomLeftMessageHistory.slice(-2).join(' ');
     //const bottomRight = document.getElementById('bottomRight').textContent;
@@ -42,6 +118,7 @@ async function sendData() {
     //console.log(message);
     console.log('Sending to ChatGPT:', message);
 
+    /*
     if (newInput) {
         // Add new input to the message history
         inputsHistory.push(newInput);
@@ -62,6 +139,7 @@ async function sendData() {
         //oldInputsElement.scrollTop = 0;
         oldInputsElement.scrollTop = oldInputsElement.scrollHeight;
     }
+    */
 
     try {
         // Get the values of both elements
@@ -84,7 +162,8 @@ async function sendData() {
         const data = await response.json();
         
         // Update to append new message to the history
-        const newMessage = data.choices[0].message.content;
+        //const newMessage = `Gemini: ${data.text}`;
+        const newMessage = `ChatGPT: ${data.choices[0].message.content}`;
         const newMessage2 = marked.parse(newMessage); //change to markdown format.
         messageHistory.push(newMessage2); // Store the new message in history
         
@@ -93,21 +172,45 @@ async function sendData() {
         console.error('Failed to communicate with the chatbot backend.', error);
     }
 }
+
 /*
-function updateTopRightArea() {
-    const chatbotResponseArea = document.getElementById('chatbotResponse');
-    chatbotResponseArea.innerHTML = messageHistory.join('<br><br>'); // Join messages with breaks
-    
-    // Scroll to the bottom of the area to show the latest message
-    chatbotResponseArea.scrollTop = chatbotResponseArea.scrollHeight;
-}
-*/
 function updateTopRightArea() {
     const chatbotResponseArea = document.getElementById('chatbotResponse');
     // Prepend "ChatGPT: " to each message
     chatbotResponseArea.innerHTML = messageHistory.map(msg => `ChatGPT: ${msg}`).join('<br><br>');
     chatbotResponseArea.scrollTop = chatbotResponseArea.scrollHeight;
 }
+*/
+function updateTopRightArea() {
+    const chatbotResponseArea = document.getElementById('chatbotResponse');
+    
+    // Clear the area before repopulating
+    chatbotResponseArea.innerHTML = '';
+    
+    // Assuming messageHistory contains markdown formatted messages
+    messageHistory.forEach((msg, index) => {
+        // Create a div for each message
+        const messageDiv = document.createElement('div');
+        
+        // Apply the "new-message" class to the last message, and "old-message" to the others
+        if (index === messageHistory.length - 1) {
+            messageDiv.className = 'new-message';
+        } else {
+            messageDiv.className = 'old-message';
+        }
+        
+        // Set the inner HTML of the div to the markdown parsed message
+        messageDiv.innerHTML = marked.parse(msg);
+        //messageDiv.innerHTML = marked.parse(`ChatGPT: ${msg}`);
+        
+        // Append the div to the chatbot response area
+        chatbotResponseArea.appendChild(messageDiv);
+    });
+    
+    // Scroll to the bottom of the area to show the latest message
+    chatbotResponseArea.scrollTop = chatbotResponseArea.scrollHeight;
+}
+
 
 
 async function sendDataToBottomLeft() {
@@ -169,7 +272,7 @@ async function sendDataToBottomLeft() {
 }
 
 
-
+/*
 function updateBottomLeftArea() {
     const bottomLeftArea = document.getElementById('bottomLeft');
     bottomLeftArea.innerHTML = bottomLeftMessageHistory.join('<br><br>'); // Join messages with breaks
@@ -177,15 +280,35 @@ function updateBottomLeftArea() {
     // Scroll to the bottom of the area to show the latest message
     bottomLeftArea.scrollTop = bottomLeftArea.scrollHeight;
 }
-/*
+*/
 function updateBottomLeftArea() {
     const bottomLeftArea = document.getElementById('bottomLeft');
-    // Prepend "Gemini: " to each message
-    bottomLeftArea.innerHTML = bottomLeftMessageHistory.map(msg => `Gemini: ${msg}`).join('<br><br>');
+    
+    // Clear the area before repopulating
+    bottomLeftArea.innerHTML = '';
+    
+    // Assuming bottomLeftMessageHistory contains markdown formatted messages
+    bottomLeftMessageHistory.forEach((msg, index) => {
+        // Create a div for each message
+        const messageDiv = document.createElement('div');
+        
+        // Apply the "new-message" class to the last message, and "old-message" to the others
+        if (index === bottomLeftMessageHistory.length - 1) {
+            messageDiv.className = 'new-message';
+        } else {
+            messageDiv.className = 'old-message';
+        }
+        
+        // Set the inner HTML of the div to the markdown parsed message
+        messageDiv.innerHTML = marked.parse(msg);
+        
+        // Append the div to the chatbot response area
+        bottomLeftArea.appendChild(messageDiv);
+    });
+    
+    // Scroll to the bottom of the area to show the latest message
     bottomLeftArea.scrollTop = bottomLeftArea.scrollHeight;
 }
-*/
-
 
 
 async function sendDataToBottomRight() {
@@ -221,17 +344,49 @@ async function sendDataToBottomRight() {
         const claudeResponseText = `Claude: ${data.msg.content.map(item => item.text).join('\n')}`;
         const claudeResponseText2 = marked.parse(claudeResponseText);
         bottomRightMessageHistory.push(claudeResponseText2);
-        updateBottomRightArea(claudeResponseText2); // Update the bottom-right area with the response
+        //updateBottomRightArea(claudeResponseText2); // Update the bottom-right area with the response
+        updateBottomRightArea();
     } catch (error) {
         console.error('Failed to communicate with the server.', error);
     }
 }
 
+/*
 function updateBottomRightArea(text) {
     const bottomRightArea = document.getElementById('bottomRight');
     bottomRightArea.innerHTML += `${text}<br><br>`; // Append new message
     bottomRightArea.scrollTop = bottomRightArea.scrollHeight; // Scroll to the latest message
 }
+*/
+function updateBottomRightArea() {
+    const bottomRightArea = document.getElementById('bottomRight');
+
+    // Clear the area before repopulating
+    bottomRightArea.innerHTML = '';
+    
+    // Assuming bottomRightMessageHistory contains markdown formatted messages
+    bottomRightMessageHistory.forEach((msg, index) => {
+        // Create a div for each message
+        const messageDiv = document.createElement('div');
+        
+        // Apply the "new-message" class to the last message, and "old-message" to the others
+        if (index === bottomRightMessageHistory.length - 1) {
+            messageDiv.className = 'new-message';
+        } else {
+            messageDiv.className = 'old-message';
+        }
+        
+        // Set the inner HTML of the div to the markdown parsed message
+        messageDiv.innerHTML = marked.parse(msg);
+        
+        // Append the div to the bottom right area
+        bottomRightArea.appendChild(messageDiv);
+    });
+    
+    // Scroll to the bottom of the area to show the latest message
+    bottomRightArea.scrollTop = bottomRightArea.scrollHeight;
+}
+
 
 async function compareAndSortOutputLengths() {
     // Simulate getting the lengths of outputs as we cannot really call the services without actual implementations

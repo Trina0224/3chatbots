@@ -180,3 +180,12 @@ input[type="submit"] {
     padding: 20px;
     background-color: #FEEAFA; /* Very light pink for consistency */
 }
+
+.old-message {
+    color: #808080; /* Gray out the old messages */
+}
+
+.new-message {
+    color: #000000; /* Use a deeper color for the new messages */
+    /*font-weight: bold; */ 
+}
