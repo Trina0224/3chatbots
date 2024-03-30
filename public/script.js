@@ -2,6 +2,7 @@
 let messageHistory = [];
 let bottomLeftMessageHistory = [];
 let inputsHistory = [];
+let bottomRightMessageHistory = [];
 
 function processAndDisplayData() {
     // Call existing functions to handle various tasks
@@ -19,9 +20,10 @@ async function sendData() {
     
     //const bottomLeft = document.getElementById('bottomLeft').textContent;
     const bottomLeftLastTwo = bottomLeftMessageHistory.slice(-2).join(' ');
-    const bottomRight = document.getElementById('bottomRight').textContent;
+    //const bottomRight = document.getElementById('bottomRight').textContent;
+    const bottomRightLastTwoResponses = bottomRightMessageHistory.slice(-2).join(' ');
     
-    const message = `${newInput} ${bottomLeftLastTwo} ${bottomRight}`;
+    const message = `${newInput} ${bottomLeftLastTwo} ${bottomRightLastTwoResponses}`;
     //console.log(message);
     console.log('Sending to ChatGPT:', message);
 
@@ -98,13 +100,15 @@ async function sendDataToBottomLeft() {
     const latestInput = inputsHistory[inputsHistory.length - 1];
     // Assuming you're using messageHistory for the top-right area responses
     const topRightLastTwoResponses = messageHistory.slice(-2).join(' '); 
-    const bottomRight = document.getElementById('bottomRight').textContent;
+    //const bottomRight = document.getElementById('bottomRight').textContent;
+    const bottomRightLastTwoResponses = bottomRightMessageHistory.slice(-2).join(' ');
+
     //const trait2 = document.getElementById('trait2').value;
 
 
     
     
-    const message = `${latestInput} ${topRightLastTwoResponses} ${bottomRight}`;
+    const message = `${latestInput} ${topRightLastTwoResponses} ${bottomRightLastTwoResponses}`;
     //console.log(message);
     console.log('Sending to Gemini:', message);
 
@@ -201,6 +205,7 @@ async function sendDataToBottomRight() {
         //const claudeResponseText = data.msg.content.map(item => item.text).join('\n');
         const claudeResponseText = `Claude: ${data.msg.content.map(item => item.text).join('\n')}`;
         const claudeResponseText2 = marked.parse(claudeResponseText);
+        bottomRightMessageHistory.push(claudeResponseText2);
         updateBottomRightArea(claudeResponseText2); // Update the bottom-right area with the response
     } catch (error) {
         console.error('Failed to communicate with the server.', error);
