@@ -63,7 +63,7 @@ node .\server.js
 
 ## Demo  
 English:  
-![Demo 1](https://github.com/Trina0224/3chatbots/blob/main/pics/Screenshot%202024-03-25%20223355.png)  
+![Demo 1](https://github.com/Trina0224/3chatbots/blob/main/pics/Screenshot%202024-03-30%20152131.png)  
 
 Chinese:    
 ![Demo 2](https://github.com/Trina0224/3chatbots/blob/main/pics/Screenshot%202024-03-26%20004357.png)
