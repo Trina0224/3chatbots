@@ -3,7 +3,13 @@
 
 At the current stage, we can have humans, ChatGPT, Gemini, and Claude chat together on the four corners of the screen.  
 現在の段階では、画面の四隅で人間、ChatGPT、Gemini、Claudeが一緒にチャットできます。  
-目前進度，可以在畫面上四個角落分別讓人類，ChatGPT, Gemini與Claude一起聊天。
+目前進度，可以在畫面上四個角落分別讓人類，ChatGPT, Gemini與Claude一起聊天。  
+
+The order of the conversation will reference the length of the previous round's conversation, with the person who spoke more in the previous round getting to start first in the new round. In the persona input section, we told the three bots that we added this rule. In theory, they should be able to understand this rule.  
+Please refer: compareAndSortOutputLengths() and processAndDisplayData().  
+
+The current observation is that Gemini's political stance is quite left-leaning. Everyone can try it out!  
+
 
 
 
@@ -33,7 +39,7 @@ node .\server.js
 03/25/2024 Integrated Claude.  
 
 ## To Do  
-1. Control the talking sequence.  
+1. ~Control the talking sequence.~  
 2. Clean codes.  
 3. ~Provide personality to each of the bots. Need to work on Claude.~    
 4. ~Can support markdown format.~  
@@ -41,6 +47,7 @@ node .\server.js
 6. Can support a hyperlink.  
 7. Deco the html and css.  
 8. Use timer to keep the discussion.  
+9. white out history and hightlight current messages.  
 
 
 ## BUG  

@@ -1,17 +1,31 @@
 // Assume we have an array to store the message history
+//
 let messageHistory = [];
 let bottomLeftMessageHistory = [];
 let inputsHistory = [];
 let bottomRightMessageHistory = [];
+let sortedBotsByOutputLength = [];
 
-function processAndDisplayData() {
-    compareAndSortOutputLengths();
-    // Call existing functions to handle various tasks
-    sendData();
-    sendDataToBottomLeft();
-    sendDataToBottomRight();
+async function processAndDisplayData() {
+    await compareAndSortOutputLengths();
+
+    // Assuming compareAndSortOutputLengths now updates a global sorted array named sortedBotsByOutputLength
+    for (let bot of sortedBotsByOutputLength) {
+        switch (bot.name) {
+            case "ChatGPT":
+                await sendData();
+                break;
+            case "Gemini":
+                await sendDataToBottomLeft();
+                break;
+            case "Claude":
+                await sendDataToBottomRight();
+                break;
+            default:
+                console.error("Unknown bot:", bot.name);
+        }
+    }
 }
-
 
 async function sendData() {
     //const input = document.getElementById('inputData').value;
@@ -219,25 +233,28 @@ function updateBottomRightArea(text) {
     bottomRightArea.scrollTop = bottomRightArea.scrollHeight; // Scroll to the latest message
 }
 
-function compareAndSortOutputLengths() {
-    // Ensure we have at least one message in each array to avoid errors
-    const chatGPTLastOutput = messageHistory.length > 0 ? messageHistory[messageHistory.length - 1] : '';
-    const geminiLastOutput = bottomLeftMessageHistory.length > 0 ? bottomLeftMessageHistory[bottomLeftMessageHistory.length - 1] : '';
-    // Use bottomRightMessageHistory for Claude's last output
-    const claudeLastOutput = bottomRightMessageHistory.length > 0 ? bottomRightMessageHistory[bottomRightMessageHistory.length - 1] : '';
+async function compareAndSortOutputLengths() {
+    // Simulate getting the lengths of outputs as we cannot really call the services without actual implementations
+    const chatGPTOutputLength = messageHistory.length > 0 ? messageHistory[messageHistory.length - 1].length : 0;
+    const geminiOutputLength = bottomLeftMessageHistory.length > 0 ? bottomLeftMessageHistory[bottomLeftMessageHistory.length - 1].length : 0;
+    const claudeOutputLength = bottomRightMessageHistory.length > 0 ? bottomRightMessageHistory[bottomRightMessageHistory.length - 1].length : 0;
 
-    // Create an array of objects with bot names and their last message length
     const botsWithLastMessageLength = [
-        { name: "ChatGPT", length: chatGPTLastOutput.length },
-        { name: "Gemini", length: geminiLastOutput.length },
-        { name: "Claude", length: claudeLastOutput.length }
+        { name: "ChatGPT", length: chatGPTOutputLength },
+        { name: "Gemini", length: geminiOutputLength },
+        { name: "Claude", length: claudeOutputLength }
     ];
 
-    // Sort bots by the length of their last message
-    botsWithLastMessageLength.sort((a, b) => a.length - b.length);
+    // Sort bots by the length of their last message, longest first. If lengths are equal, maintain the order ChatGPT > Gemini > Claude
+    botsWithLastMessageLength.sort((a, b) => {
+        if (a.length === b.length) {
+            return ["ChatGPT", "Gemini", "Claude"].indexOf(a.name) - ["ChatGPT", "Gemini", "Claude"].indexOf(b.name);
+        }
+        return b.length - a.length; // For descending order
+    });
 
-    // Log or use the sorted information as needed
-    console.log("Bots sorted by last message length (shortest to longest):", botsWithLastMessageLength);
+    sortedBotsByOutputLength = botsWithLastMessageLength;
+    console.log("Bots sorted by last message length:", botsWithLastMessageLength);
 }
 
 
