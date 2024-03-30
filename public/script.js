@@ -47,13 +47,21 @@ async function sendData() {
     }
 
     try {
+        // Get the values of both elements
+        const trait1Value = document.getElementById('trait1').value;
+        const traitCommonValue = document.getElementById('traitCommon').value;
+
+        // Merge the two strings
+        const mergedTraits = `${trait1Value} ${traitCommonValue}`;
+        //console.log('Preset to ChatGPT: ',mergedTraits);
+
         const response = await fetch('/chat', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             //body: JSON.stringify({ message }),
             body: JSON.stringify({
                 message: message,
-                trait1: document.getElementById('trait1').value // Gets the content of the textarea
+                trait1: mergedTraits // Gets the content of the textarea
             }),
         });
         const data = await response.json();
@@ -91,18 +99,32 @@ async function sendDataToBottomLeft() {
     // Assuming you're using messageHistory for the top-right area responses
     const topRightLastTwoResponses = messageHistory.slice(-2).join(' '); 
     const bottomRight = document.getElementById('bottomRight').textContent;
-    const trait2 = document.getElementById('trait2').value;
+    //const trait2 = document.getElementById('trait2').value;
 
+
+    
     
     const message = `${latestInput} ${topRightLastTwoResponses} ${bottomRight}`;
     //console.log(message);
     console.log('Sending to Gemini:', message);
 
     try {
+
+        // Get the values of both elements
+        const trait2Value = document.getElementById('trait2').value;
+        const traitCommonValue = document.getElementById('traitCommon').value;
+
+        // Merge the two strings
+        const mergedTraits = `${trait2Value} ${traitCommonValue}`;
+        //console.log('Preset to Gemini: ',mergedTraits);
+
         const response = await fetch('/generateWithGemini', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ message, trait2 }),
+            body: JSON.stringify({
+                message: message,
+                trait2: mergedTraits // Gets the content of the textarea
+            }),
         });
         const data = await response.json();
 
@@ -152,16 +174,27 @@ async function sendDataToBottomRight() {
     const topRightLastTwoResponses = messageHistory.slice(-2).join(' '); 
     const bottomLeftLastTwoResponses = bottomLeftMessageHistory.slice(-2).join(' ');
 
-    const trait3 = document.getElementById('trait3').value;
+    //const trait3 = document.getElementById('trait3').value;
     
     const message = `${latestInput} ${topRightLastTwoResponses} ${bottomLeftLastTwoResponses}`;
     console.log('Sending to Claude:', message);
 
     try {
+        // Get the values of both elements
+        const trait3Value = document.getElementById('trait3').value;
+        const traitCommonValue = document.getElementById('traitCommon').value;
+
+        // Merge the two strings
+        const mergedTraits = `${trait3Value} ${traitCommonValue}`;
+        //console.log('Preset to Claude: ',mergedTraits);
+        
         const response = await fetch('/chatWithClaude', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ message, trait3 }),
+            body: JSON.stringify({
+                message: message,
+                trait3: mergedTraits // Gets the content of the textarea
+            }),
         });
         const data = await response.json();
         // Adjust the path to access the nested text based on the Claude response structure
