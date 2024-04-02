@@ -6,54 +6,38 @@ let inputsHistory = [];
 let bottomRightMessageHistory = [];
 let sortedBotsByOutputLength = [];
 
-/*
-async function processAndDisplayData() {
-    // Capture the user input from the text area.
-    const inputElement = document.getElementById('inputData');
-    const oldInputsElement = document.getElementById('oldInputs');
-    const newInput = inputElement.value.trim();
 
-    // Check if there is a new input and prepend "Human: " to it before adding to the inputsHistory array.
-    if (newInput) {
-        const formattedInput = "Human: " + newInput;
-        inputsHistory.push(formattedInput); // Add the formatted input to the history.
+function toggleLabel(checkboxId, labelId, muteText, unmuteText) {
+    const checkbox = document.getElementById(checkboxId);
+    const label = document.getElementById(labelId);
 
-        // Clear the text area for the next input.
-        inputElement.value = '';
-
-        // Update the oldInputs display using the inputsHistory array.
-        oldInputsElement.innerHTML = ''; // Clear the display before repopulating.
-        inputsHistory.forEach(input => {
-            const inputDiv = document.createElement('div');
-            inputDiv.textContent = input;
-            oldInputsElement.appendChild(inputDiv);
-        });
-
-        // Scroll to the bottom of the oldInputs area to show the most recent input.
-        oldInputsElement.scrollTop = oldInputsElement.scrollHeight;
-    }
-
-
-    await compareAndSortOutputLengths();
-
-    // Assuming compareAndSortOutputLengths now updates a global sorted array named sortedBotsByOutputLength
-    for (let bot of sortedBotsByOutputLength) {
-        switch (bot.name) {
-            case "ChatGPT":
-                await sendData();
-                break;
-            case "Gemini":
-                await sendDataToBottomLeft();
-                break;
-            case "Claude":
-                await sendDataToBottomRight();
-                break;
-            default:
-                console.error("Unknown bot:", bot.name);
-        }
+    if (checkbox.checked) {
+        label.textContent = unmuteText;
+    } else {
+        label.textContent = muteText;
     }
 }
-*/
+
+// Call the function for each checkbox on page load and set event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    toggleLabel('enableChatGPT', 'labelChatGPT', 'Mute ChatGPT', 'Unmute ChatGPT');
+    toggleLabel('enableGemini', 'labelGemini', 'Mute Gemini', 'Unmute Gemini');
+    toggleLabel('enableClaude', 'labelClaude', 'Mute Claude', 'Unmute Claude');
+
+    document.getElementById('enableChatGPT').addEventListener('change', function() {
+        toggleLabel('enableChatGPT', 'labelChatGPT', 'Mute ChatGPT', 'Unmute ChatGPT');
+    });
+    document.getElementById('enableGemini').addEventListener('change', function() {
+        toggleLabel('enableGemini', 'labelGemini', 'Mute Gemini', 'Unmute Gemini');
+    });
+    document.getElementById('enableClaude').addEventListener('change', function() {
+        toggleLabel('enableClaude', 'labelClaude', 'Mute Claude', 'Unmute Claude');
+    });
+});
+
+
+
+
 async function processAndDisplayData() {
     const inputElement = document.getElementById('inputData');
     const oldInputsElement = document.getElementById('oldInputs');
@@ -86,18 +70,12 @@ async function processAndDisplayData() {
     // Continue with the rest of the processing
     await compareAndSortOutputLengths();
     for (let bot of sortedBotsByOutputLength) {
-        switch (bot.name) {
-            case "ChatGPT":
-                await sendData();
-                break;
-            case "Gemini":
-                await sendDataToBottomLeft();
-                break;
-            case "Claude":
-                await sendDataToBottomRight();
-                break;
-            default:
-                console.error("Unknown bot:", bot.name);
+        if (bot.name === "ChatGPT" && document.getElementById('enableChatGPT').checked) {
+            await sendData();
+        } else if (bot.name === "Gemini" && document.getElementById('enableGemini').checked) {
+            await sendDataToBottomLeft();
+        } else if (bot.name === "Claude" && document.getElementById('enableClaude').checked) {
+            await sendDataToBottomRight();
         }
     }
 }

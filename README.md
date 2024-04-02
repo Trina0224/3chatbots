@@ -50,6 +50,8 @@ node .\server.js
 7. Deco the html and css.  
 8. Use timer to keep the discussion.  
 9. ~white out history and hightlight current messages.~  
+10. ~Put Disable/Enable Chatbot Funcion.~  
+
 
 
 ## BUG  
