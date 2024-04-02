@@ -36,6 +36,38 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Attach an event listener to the checkbox
+    document.getElementById('discussionInOneContainer').addEventListener('change', function() {
+        toggleDiscussionContainer(this.checked);
+    });
+});
+
+function toggleDiscussionContainer(isChecked) {
+    const discussionContainer = document.getElementById('discussionContainer');
+    const chatContainers = document.querySelectorAll('.top-left, .top-right, .bottom-left, .bottom-right');
+
+    if (isChecked) {
+        // Adjust styles when checked
+        discussionContainer.style.display = 'block';
+        discussionContainer.style.height = '66.67vh'; // 2/3 of the screen height
+        discussionContainer.style.overflowY = 'scroll'; // Ensure it has a vertical scroll
+        chatContainers.forEach(container => {
+            container.style.height = 'calc(33.33vh - 20px)'; // Adjusted to 1/3
+        });
+    } else {
+        // Revert styles when unchecked
+        discussionContainer.style.display = 'none';
+        discussionContainer.style.height = '0';
+        chatContainers.forEach(container => {
+            container.style.removeProperty('height'); // Removes inline height style
+        });
+    }
+}
+
+
+
+
 
 
 async function processAndDisplayData() {
@@ -52,6 +84,10 @@ async function processAndDisplayData() {
 
     // Add the newInput to the inputsHistory array regardless of its state
     inputsHistory.push(newInput);
+    //
+    if (document.getElementById('discussionInOneContainer').checked) {
+        appendMessageToDiscussionContainer(newInput); // For sendDataToBottomLeft and sendDataToBottomRight, ensure newMessage2 is the formatted message you intend to append
+    }
 
     // Clear the textarea
     inputElement.value = '';
@@ -146,6 +182,10 @@ async function sendData() {
         messageHistory.push(newMessage2); // Store the new message in history
         
         updateTopRightArea(); // Call function to update the display
+        //
+        if (document.getElementById('discussionInOneContainer').checked) {
+            appendMessageToDiscussionContainer(newMessage2); // For sendDataToBottomLeft and sendDataToBottomRight, ensure newMessage2 is the formatted message you intend to append
+        }
     } catch (error) {
         console.error('Failed to communicate with the chatbot backend.', error);
     }
@@ -236,6 +276,10 @@ async function sendDataToBottomLeft() {
         bottomLeftMessageHistory.push(newMessage2);
 
         updateBottomLeftArea();
+        //
+        if (document.getElementById('discussionInOneContainer').checked) {
+            appendMessageToDiscussionContainer(newMessage2); // For sendDataToBottomLeft and sendDataToBottomRight, ensure newMessage2 is the formatted message you intend to append
+        }
         
        /* // Assuming the structure of data returned matches what you expect
         document.getElementById('bottomLeft').innerHTML += `${data.text}<br><br>`; // Append new message
@@ -324,6 +368,10 @@ async function sendDataToBottomRight() {
         bottomRightMessageHistory.push(claudeResponseText2);
         //updateBottomRightArea(claudeResponseText2); // Update the bottom-right area with the response
         updateBottomRightArea();
+        //
+        if (document.getElementById('discussionInOneContainer').checked) {
+            appendMessageToDiscussionContainer(claudeResponseText2); // For sendDataToBottomLeft and sendDataToBottomRight, ensure newMessage2 is the formatted message you intend to append
+        }
     } catch (error) {
         console.error('Failed to communicate with the server.', error);
     }
@@ -363,6 +411,21 @@ function updateBottomRightArea() {
     
     // Scroll to the bottom of the area to show the latest message
     bottomRightArea.scrollTop = bottomRightArea.scrollHeight;
+}
+
+
+//
+function appendMessageToDiscussionContainer(message) {
+    const discussionContainer = document.getElementById('discussionContainer');
+    const messageDiv = document.createElement('div');
+    messageDiv.innerHTML = message;
+    discussionContainer.appendChild(messageDiv);
+    
+    // Ensure discussionContainer can scroll vertically
+    discussionContainer.style.overflowY = 'auto';
+
+    // Scroll to the bottom of the container to show the latest message
+    discussionContainer.scrollTop = discussionContainer.scrollHeight;
 }
 
 

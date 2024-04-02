@@ -71,7 +71,9 @@ input[type="submit"] {
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Aligns the input area to the bottom */
+    /*justify-content: start; */ /* Aligns children to the start of the container */
     background-color: #8E9AAF; /* Smoky blue  or called cool Gray*/
+    /*align-items: stretch;*/ /* Stretches children to fit the container's width */
 }
 
 .old-inputs {
@@ -189,3 +191,13 @@ input[type="submit"] {
     color: #000000; /* Use a deeper color for the new messages */
     /*font-weight: bold; */ 
 }
+
+/* New Discussion Container CSS */
+.discussion-container {
+    height: 66.67vh; /* 2/3 of the screen height */
+    overflow-y: auto; /* Allows scrolling if content exceeds the container height */
+    /* Add other styling as needed */
+    background-color: #FEEAFA
+}
+
+

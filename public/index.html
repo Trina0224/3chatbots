@@ -19,7 +19,12 @@
         <p>Experience a new level of digital conversation with our advanced chatbot technology.</p>
         <a href="#description-section" class="btn-start">Get Started</a>
     </div>
-    
+
+    <!-- New Discussion Container -->
+    <div class="discussion-container" id="discussionContainer" style="display: none;">
+        <!-- Content of the discussion goes here -->
+    </div>    
+
     <div class="container">
         <div class="top-left">
             <div id="oldInputs" class="old-inputs"></div> <!-- Display area for old inputs -->
@@ -28,7 +33,8 @@
 
             <!--<button onclick="sendData(); sendDataToBottomLeft(); sendDataToBottomRight()">Send</button> -->
         </div>
-        
+
+    
         <!-- Placeholder divs for chatbot response and other content -->
         <div class="top-right" id="chatbotResponse"></div>
         <div class="bottom-left" id="bottomLeft"></div>
@@ -59,7 +65,11 @@
     <div class="enable-disable-chatbot">
         <h2>Mute/Unmute ChatBots</h2>
         <input type="checkbox" id="enableChatGPT" name="enableChatGPT" checked>
-        <label for="enableChatGPT" id="labelChatGPT">Unmute ChatGPT</label><br>
+        <label for="enableChatGPT" id="labelChatGPT">Unmute ChatGPT</label>
+        
+        <input type="checkbox" id="discussionInOneContainer" name="discussionInOneContainer">
+        <label for="discussionInOneContainer">Discussion in one container</label><br>
+    
         <input type="checkbox" id="enableGemini" name="enableGemini" checked>
         <label for="enableGemini" id="labelGemini">Unmute Gemini</label><br>
         <input type="checkbox" id="enableClaude" name="enableClaude" checked>

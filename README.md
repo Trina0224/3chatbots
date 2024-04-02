@@ -48,9 +48,12 @@ node .\server.js
 5. Can upload a picutre.  
 6. Can support a hyperlink.  
 7. Deco the html and css.  
-8. Use timer to keep the discussion.  
+8. ~Use timer to keep the discussion.~ Not Necessary.  
 9. ~white out history and hightlight current messages.~  
 10. ~Put Disable/Enable Chatbot Funcion.~  
+11. ~Add an area for chat in sequencial.~  
+12. Chat in one container is not so good. have to do some improvement.  
+
 
 
 
