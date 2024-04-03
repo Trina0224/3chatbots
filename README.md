@@ -10,6 +10,9 @@ Please refer: compareAndSortOutputLengths() and processAndDisplayData().
 
 The current observation is that Gemini's political stance is quite left-leaning. Everyone can try it out!  
 
+WOW! ChatGPT4 vs 3 is way more expensive!!!  
+
+
 
 
 
@@ -62,6 +65,8 @@ node .\server.js
 2. Gemini has limitaion. Have to wait for the pay as you go API Key.  
 3. ~Move inputs handling to processAndDisplayData() from sendData().~
 4. ~Fix human cannot keep silent issue.~  
+5. In script.js L94. will fix this after I add the photo function to Gemini and Claude.  
+
 
 
 

@@ -91,6 +91,7 @@ async function processAndDisplayData() {
 
     // Clear the textarea
     inputElement.value = '';
+    //04022024 bug!!! document.getElementById('linkInput').value = '';
 
     // Update the display based on the inputsHistory array
     oldInputsElement.innerHTML = ''; // Clear current display
@@ -116,7 +117,7 @@ async function processAndDisplayData() {
     }
 }
 
-
+/*
 async function sendData() {
     //const input = document.getElementById('inputData').value;
     //const inputElement = document.getElementById('inputData');
@@ -132,28 +133,6 @@ async function sendData() {
     //console.log(message);
     console.log('Sending to ChatGPT:', message);
 
-    /*
-    if (newInput) {
-        // Add new input to the message history
-        inputsHistory.push(newInput);
-        
-        // Update the old inputs display
-        const newInputDiv = document.createElement('div');
-        newInputDiv.textContent = newInput;
-        //oldInputsElement.prepend(newInputDiv); // Adds the new input at the top of the old inputs area
-        oldInputsElement.appendChild(newInputDiv); // Adds the new input at the bottom of the old inputs area
-
-        // Clear the text area for the next input
-        inputElement.value = '';
-        
-        // Keep only the latest 2 entries from the bottom left (if needed for another function)
-        // const latestTwoInputs = messageHistory.slice(-2);
-
-        // Scroll to the top to show the most recent old input
-        //oldInputsElement.scrollTop = 0;
-        oldInputsElement.scrollTop = oldInputsElement.scrollHeight;
-    }
-    */
 
     try {
         // Get the values of both elements
@@ -190,6 +169,67 @@ async function sendData() {
         console.error('Failed to communicate with the chatbot backend.', error);
     }
 }
+*/
+async function sendData() {
+    const newInput = inputsHistory.length > 0 ? inputsHistory[inputsHistory.length - 1] : '';
+    const bottomLeftLastTwo = bottomLeftMessageHistory.slice(-2).join(' ');
+    const bottomRightLastTwoResponses = bottomRightMessageHistory.slice(-2).join(' ');
+    const message = `${newInput} ${bottomLeftLastTwo} ${bottomRightLastTwoResponses}`;
+    console.log('Sending to ChatGPT:', message);
+
+    const linkInput = document.getElementById('linkInput').value.trim(); // Get the link input
+    const trait1Value = document.getElementById('trait1').value;
+    const traitCommonValue = document.getElementById('traitCommon').value;
+    const mergedTraits = `${trait1Value} ${traitCommonValue}`;
+
+    let endpoint = '/chat'; // Default endpoint
+    let requestBody = {
+        message: message,
+        trait1: mergedTraits // System message content
+    };
+
+    // If there's a link, switch to the /chatWithImage endpoint and adjust requestBody
+    if (linkInput) {
+        endpoint = '/chatWithImage';
+        requestBody = {
+            imageUrl: linkInput,
+            userText: message, // The actual user input text
+            trait1: mergedTraits // System message content, shared for consistency
+        };
+    }
+
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(requestBody),
+        });
+        const data = await response.json();
+        
+        // Extracting the message content based on the response structure
+        let responseMessage;
+        if (endpoint === '/chatWithImage') {
+            // Directly accessing the 'message.content' for the '/chatWithImage' endpoint response
+            responseMessage = `ChatGPT: ${data.message.content}`;
+        } else {
+            // Assuming '/chat' endpoint returns a structure with 'choices'
+            responseMessage = `ChatGPT: ${data.choices[0].message.content}`;
+        }
+        // Assuming both endpoints return data with similar structure
+        //const responseMessage = endpoint === '/chatWithImage' ? `ChatGPT: ${data.content}` : `ChatGPT: ${data.choices[0].message.content}`;
+        const formattedMessage = marked.parse(responseMessage); // Convert to markdown format.
+        messageHistory.push(formattedMessage); // Store the new message in history
+        
+        updateTopRightArea(); // Call function to update the display
+        
+        if (document.getElementById('discussionInOneContainer').checked) {
+            appendMessageToDiscussionContainer(formattedMessage);
+        }
+    } catch (error) {
+        console.error('Failed to communicate with the chatbot backend.', error);
+    }
+}
+
 
 /*
 function updateTopRightArea() {
@@ -452,5 +492,14 @@ async function compareAndSortOutputLengths() {
     sortedBotsByOutputLength = botsWithLastMessageLength;
     console.log("Bots sorted by last message length:", botsWithLastMessageLength);
 }
+
+//04022024
+const linkButton = document.getElementById('linkButton');
+const linkInput = document.getElementById('linkInput');
+
+linkButton.addEventListener('click', () => {
+    const isLinkInputVisible = linkInput.style.display !== 'none';
+    linkInput.style.display = isLinkInputVisible ? 'none' : 'block';
+});
 
 

@@ -48,7 +48,7 @@ app.post('/chat', async (req, res) => {
         const systemMessageContent = req.body.trait1;
         //console.log(systemMessageContent);
         const params = {
-            model: 'gpt-3.5-turbo', // Adjust model as needed
+            model: 'gpt-3.5-turbo', // gpt-4-vision-preview, gpt-4-1106-vision-preview Adjust model as needed
             messages: [
                 {
                     role: 'system',
@@ -61,14 +61,50 @@ app.post('/chat', async (req, res) => {
             ],
         };
         const chatCompletion = await openai.chat.completions.create(params);
-        console.log('Received from ChatGPT:', chatCompletion);
+        console.log('Received from ChatGPT3:', chatCompletion);
         res.json(chatCompletion);
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error communicating with ChatGPT API');
+        res.status(500).send('Error communicating with ChatGPT3 API');
     }
 });
 
+app.post('/chatWithImage', async (req, res) => {
+    const imageUrl = req.body.imageUrl;
+    const userText = req.body.userText;
+    const systemMessageContent = req.body.trait1; // System message content from client
+
+    try {
+        const response = await openai.chat.completions.create({
+            model: "gpt-4-vision-preview",
+            messages: [
+                {
+                    role: 'system',
+                    content: systemMessageContent // System message content
+                },
+                {
+                    role: "user",
+                    content: [
+                        { type: "text", text: userText },
+                        {
+                            type: "image_url",
+                            image_url: {
+                                url: imageUrl,
+                                detail: "auto" //high, low, auto.
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+
+        console.log('Received from ChatGPT4:', response.choices[0]);
+        res.json(response.choices[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error processing image with ChatGPT4 API');
+    }
+});
 
 
 /*

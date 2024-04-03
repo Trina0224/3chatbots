@@ -28,6 +28,12 @@
     <div class="container">
         <div class="top-left">
             <div id="oldInputs" class="old-inputs"></div> <!-- Display area for old inputs -->
+            <div class="input-group">
+                <button id="linkButton" class="link-button">
+                    🔗
+                </button>
+                <textarea id="linkInput" class="link-input" placeholder="Enter a link..." style="display: none;"></textarea>
+            </div>
             <textarea id="inputData" rows="4" placeholder="Enter your message..."></textarea>
             <button onclick="processAndDisplayData()">Send</button>
 

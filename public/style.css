@@ -200,4 +200,26 @@ input[type="submit"] {
     background-color: #FEEAFA
 }
 
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
 
+.link-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.link-input {
+    flex: 1;
+    margin-left: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
