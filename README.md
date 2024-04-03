@@ -56,6 +56,7 @@ node .\server.js
 10. ~Put Disable/Enable Chatbot Funcion.~  
 11. ~Add an area for chat in sequencial.~  
 12. Chat in one container is not so good. have to do some improvement.  
+13. Gemini cannot read image from hyperlink. [https://ai.google.dev/tutorials/get_started_node#generate-text-from-text-and-image-input]
 
 
 
