@@ -29,9 +29,10 @@
         <div class="top-left">
             <div id="oldInputs" class="old-inputs"></div> <!-- Display area for old inputs -->
             <div class="input-group">
-                <button id="linkButton" class="link-button">
-                    🔗
-                </button>
+                <button id="fileUploadButton" class="link-button">📂</button>
+                <input type="file" id="fileInput" accept=".jpg, .jpeg, .png, .webp, .heic, .heif" style="display: none;" />
+                <button id="linkButton" class="link-button">🔗</button>
+                <img id="imagePreview" src="" alt="Image preview" style="display:none; max-width: 128px; max-height: 128px;">                
                 <textarea id="linkInput" class="link-input" placeholder="Enter a link..." style="display: none;"></textarea>
             </div>
             <textarea id="inputData" rows="4" placeholder="Enter your message..."></textarea>

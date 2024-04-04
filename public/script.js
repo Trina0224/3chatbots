@@ -66,10 +66,6 @@ function toggleDiscussionContainer(isChecked) {
 }
 
 
-
-
-
-
 async function processAndDisplayData() {
     const inputElement = document.getElementById('inputData');
     const oldInputsElement = document.getElementById('oldInputs');
@@ -117,59 +113,7 @@ async function processAndDisplayData() {
     }
 }
 
-/*
-async function sendData() {
-    //const input = document.getElementById('inputData').value;
-    //const inputElement = document.getElementById('inputData');
-    //const oldInputsElement = document.getElementById('oldInputs');
-    //const newInput = inputElement.value.trim();
-    const newInput = inputsHistory.length > 0 ? inputsHistory[inputsHistory.length - 1] : '';
-    //const bottomLeft = document.getElementById('bottomLeft').textContent;
-    const bottomLeftLastTwo = bottomLeftMessageHistory.slice(-2).join(' ');
-    //const bottomRight = document.getElementById('bottomRight').textContent;
-    const bottomRightLastTwoResponses = bottomRightMessageHistory.slice(-2).join(' ');
-    
-    const message = `${newInput} ${bottomLeftLastTwo} ${bottomRightLastTwoResponses}`;
-    //console.log(message);
-    console.log('Sending to ChatGPT:', message);
 
-
-    try {
-        // Get the values of both elements
-        const trait1Value = document.getElementById('trait1').value;
-        const traitCommonValue = document.getElementById('traitCommon').value;
-
-        // Merge the two strings
-        const mergedTraits = `${trait1Value} ${traitCommonValue}`;
-        //console.log('Preset to ChatGPT: ',mergedTraits);
-
-        const response = await fetch('/chat', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            //body: JSON.stringify({ message }),
-            body: JSON.stringify({
-                message: message,
-                trait1: mergedTraits // Gets the content of the textarea
-            }),
-        });
-        const data = await response.json();
-        
-        // Update to append new message to the history
-        //const newMessage = `Gemini: ${data.text}`;
-        const newMessage = `ChatGPT: ${data.choices[0].message.content}`;
-        const newMessage2 = marked.parse(newMessage); //change to markdown format.
-        messageHistory.push(newMessage2); // Store the new message in history
-        
-        updateTopRightArea(); // Call function to update the display
-        //
-        if (document.getElementById('discussionInOneContainer').checked) {
-            appendMessageToDiscussionContainer(newMessage2); // For sendDataToBottomLeft and sendDataToBottomRight, ensure newMessage2 is the formatted message you intend to append
-        }
-    } catch (error) {
-        console.error('Failed to communicate with the chatbot backend.', error);
-    }
-}
-*/
 async function sendData() {
     const newInput = inputsHistory.length > 0 ? inputsHistory[inputsHistory.length - 1] : '';
     const bottomLeftLastTwo = bottomLeftMessageHistory.slice(-2).join(' ');
@@ -231,6 +175,9 @@ async function sendData() {
 }
 
 
+
+
+
 /*
 function updateTopRightArea() {
     const chatbotResponseArea = document.getElementById('chatbotResponse');
@@ -270,7 +217,7 @@ function updateTopRightArea() {
 }
 
 
-
+/*
 async function sendDataToBottomLeft() {
     //const input = document.getElementById('inputData').value;
     const latestInput = inputsHistory[inputsHistory.length - 1];
@@ -321,13 +268,61 @@ async function sendDataToBottomLeft() {
             appendMessageToDiscussionContainer(newMessage2); // For sendDataToBottomLeft and sendDataToBottomRight, ensure newMessage2 is the formatted message you intend to append
         }
         
-       /* // Assuming the structure of data returned matches what you expect
-        document.getElementById('bottomLeft').innerHTML += `${data.text}<br><br>`; // Append new message
-        
-        // Scroll to the bottom of the bottom-left area
-        const bottomLeftArea = document.getElementById('bottomLeft');
-        bottomLeftArea.scrollTop = bottomLeftArea.scrollHeight;
-        */
+    } catch (error) {
+        console.error('Failed to communicate with the Gemini backend.', error);
+    }
+}
+*/
+
+async function sendDataToBottomLeft() {
+    const latestInput = inputsHistory[inputsHistory.length - 1];
+    const topRightLastTwoResponses = messageHistory.slice(-2).join(' '); 
+    const bottomRightLastTwoResponses = bottomRightMessageHistory.slice(-2).join(' ');
+
+    const message = `${latestInput} ${topRightLastTwoResponses} ${bottomRightLastTwoResponses}`;
+    console.log('Sending to Gemini:', message);
+
+    // Determine if an image has been uploaded
+    const imageUploaded = document.getElementById('fileInput').files.length > 0;
+
+    let endpoint = '/generateWithGemini'; // Default endpoint
+    let fetchOptions = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            message: message,
+            trait2: `${document.getElementById('trait2').value} ${document.getElementById('traitCommon').value}` // Merging trait2 and traitCommon values
+        }),
+    };
+
+    // If an image is uploaded, adjust the endpoint and fetch options
+    if (imageUploaded) {
+        endpoint = '/generateWithGeminiAndImage';
+        // Since the image needs to be sent as FormData, we'll change the fetch options accordingly
+        const formData = new FormData();
+        formData.append('imageFile', document.getElementById('fileInput').files[0]);
+        formData.append('message', message);
+        formData.append('trait2', `${document.getElementById('trait2').value} ${document.getElementById('traitCommon').value}`); // Merging trait2 and traitCommon values
+
+        fetchOptions = {
+            method: 'POST',
+            body: formData,
+            // Headers are not set explicitly; the browser will set the Content-Type to multipart/form-data and include the boundary automatically
+        };
+    }
+
+    try {
+        const response = await fetch(endpoint, fetchOptions);
+        const data = await response.json();
+
+        const newMessage = `Gemini: ${data.text}`;
+        const formattedMessage = marked.parse(newMessage); // Assuming you are using Marked.js for markdown parsing
+        bottomLeftMessageHistory.push(formattedMessage);
+        updateBottomLeftArea();
+
+        if (document.getElementById('discussionInOneContainer').checked) {
+            appendMessageToDiscussionContainer(formattedMessage);
+        }
     } catch (error) {
         console.error('Failed to communicate with the Gemini backend.', error);
     }
@@ -502,4 +497,41 @@ linkButton.addEventListener('click', () => {
     linkInput.style.display = isLinkInputVisible ? 'none' : 'block';
 });
 
+//04032024
+document.getElementById('fileUploadButton').addEventListener('click', function() {
+    document.getElementById('fileInput').click();
+});
+
+document.getElementById('fileInput').addEventListener('change', function() {
+    if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Set the src of the imagePreview element to the loaded file
+            console.log('Uploaded image preview URL:', e.target.result);
+            const preview = document.getElementById('imagePreview');
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Show the preview
+        };
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
+//fix DOM before and after issue
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('fileInput').addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('imagePreview');
+                if (preview) { // Check if the element exists
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                } else {
+                    console.error('Element with ID imagePreview not found');
+                }
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+});
 

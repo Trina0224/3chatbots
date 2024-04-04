@@ -223,3 +223,14 @@ input[type="submit"] {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+#imagePreview {
+    display: none; /* Initially hide the image */
+    max-width: 128px; /* Maximum width of 512px */
+    max-height: 128px; /* Maximum height of 512px */
+    width: auto; /* Maintain aspect ratio */
+    height: auto; /* Maintain aspect ratio */
+    border: 2px solid #ddd; /* A light grey border around the image */
+    border-radius: 4px; /* Slightly rounded corners for a softer look */
+    margin-top: 10px; /* Space above the image */
+}

@@ -10,8 +10,12 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 //import Claude
 const Anthropic = require('@anthropic-ai/sdk');
 
+const fs = require('fs');
+const fetch = require('node-fetch');
+
 
 const express = require('express');
+const fileUpload = require('express-fileupload');
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -22,9 +26,24 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_API_KEY });
 
+app.use(fileUpload());
 app.use(express.json());
 app.use(express.static('public'));
 
+app.post('/upload', (req, res) => {
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send('No files were uploaded.');
+    }
+    
+    // Access the uploaded file via req.files.<inputFieldName>, e.g., req.files.imageFile
+    const uploadedFile = req.files.imageFile;
+    
+    // You can now use the uploadedFile to read its data, save it to disk, or other processing
+    console.log(uploadedFile.name);
+    
+    res.send('File uploaded!');
+  });
+  
 /*app.post('/chat', async (req, res) => {
     try {
         const params = {
@@ -106,6 +125,63 @@ app.post('/chatWithImage', async (req, res) => {
     }
 });
 
+app.post('/chatWithUploadFile', async (req, res) => {
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).send('No files were uploaded.');
+    }
+
+    // This assumes the client sends the text as 'userText' in the body
+    const userText = req.body.userText;
+
+    // Access the uploaded file via req.files.<inputFieldName>, e.g., req.files.uploadedImage
+    const uploadedFile = req.files.uploadedImage;
+    const base64Image = uploadedFile.data.toString('base64');
+    const mimeType = uploadedFile.mimetype;
+
+    const OPENAI_API_KEY = process.env.CHATGPT_API_KEY;
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${OPENAI_API_KEY}`
+    };
+
+    const payload = {
+        "model": "gpt-4-vision-preview",
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": userText // Use the userText from the request body
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": `data:${mimeType};base64,${base64Image}`
+                        }
+                    }
+                ]
+            }
+        ],
+        "max_tokens": 300
+    };
+
+    try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(payload)
+        });
+
+        const responseData = await response.json();
+        res.send(responseData);
+    } catch (error) {
+        console.error('Error making API request:', error);
+        res.status(500).send('Failed to communicate with OpenAI API');
+    }
+});
+
+
 
 /*
 app.post('/generateWithGemini', async (req, res) => {
@@ -165,6 +241,31 @@ app.post('/generateWithGemini', async (req, res) => {
     }
 });
 
+app.post('/generateWithGeminiAndImage', async (req, res) => {
+    try {
+        const userPrompt = req.body.message;
+        const modelResponsePart = req.body.trait2;
+
+        // Assuming the image is uploaded and available as req.files.imageFile
+        const imageFile = req.files.imageFile; // The 'imageFile' corresponds to the name attribute in the form
+        const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+
+        const image = {
+            inlineData: {
+                data: Buffer.from(imageFile.data).toString("base64"),
+                mimeType: imageFile.mimetype,
+            },
+        };
+
+        const result = await model.generateContent([{ text: userPrompt }, image]);
+        console.log('Received from Gemini Vision:', result.response.text());
+
+        res.json({ text: result.response.text() });
+    } catch (error) {
+        console.error('Failed to communicate with Gemini Vision API.', error);
+        res.status(500).send('Error communicating with Gemini Vision API');
+    }
+});
 
 
 // Endpoint for chatting with Claude

@@ -29,6 +29,9 @@ CLAUDE_API_KEY=
 npm install @google/generative-ai  
 npm install openai  
 npm install @anthropic-ai/sdk  
+npm install express-fileupload  
+npm install node-fetch
+
 
 
 ## Run  
@@ -56,7 +59,7 @@ node .\server.js
 10. ~Put Disable/Enable Chatbot Funcion.~  
 11. ~Add an area for chat in sequencial.~  
 12. Chat in one container is not so good. have to do some improvement.  
-13. Gemini cannot read image from hyperlink. [https://ai.google.dev/tutorials/get_started_node#generate-text-from-text-and-image-input]
+13. Gemini, Claude cannot read image from hyperlink. [https://ai.google.dev/tutorials/get_started_node#generate-text-from-text-and-image-input]
 
 
 
@@ -66,7 +69,7 @@ node .\server.js
 2. Gemini has limitaion. Have to wait for the pay as you go API Key.  
 3. ~Move inputs handling to processAndDisplayData() from sendData().~
 4. ~Fix human cannot keep silent issue.~  
-5. In script.js L94. will fix this after I add the photo function to Gemini and Claude.  
+5. In script.js L90. will fix this after I add the photo function to Gemini and Claude.  
 
 
 
