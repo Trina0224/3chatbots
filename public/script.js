@@ -5,6 +5,7 @@ let bottomLeftMessageHistory = [];
 let inputsHistory = [];
 let bottomRightMessageHistory = [];
 let sortedBotsByOutputLength = [];
+let uploadedImageUrl = "";
 
 
 function toggleLabel(checkboxId, labelId, muteText, unmuteText) {
@@ -66,6 +67,7 @@ function toggleDiscussionContainer(isChecked) {
 }
 
 
+
 async function processAndDisplayData() {
     const inputElement = document.getElementById('inputData');
     const oldInputsElement = document.getElementById('oldInputs');
@@ -113,7 +115,7 @@ async function processAndDisplayData() {
     }
 }
 
-
+/*
 async function sendData() {
     const newInput = inputsHistory.length > 0 ? inputsHistory[inputsHistory.length - 1] : '';
     const bottomLeftLastTwo = bottomLeftMessageHistory.slice(-2).join(' ');
@@ -173,6 +175,61 @@ async function sendData() {
         console.error('Failed to communicate with the chatbot backend.', error);
     }
 }
+*/
+
+
+async function sendData() {
+    const inputDataElement = document.getElementById('inputData');
+    let newInput = inputDataElement.value.trim();
+    const trait1Value = document.getElementById('trait1').value;
+    const traitCommonValue = document.getElementById('traitCommon').value;
+    const mergedTraits = `${trait1Value} ${traitCommonValue}`;
+
+    // Use the directly provided URL or the URL from the uploaded file
+    let imageUrl = document.getElementById('linkInput').value.trim() || uploadedImageUrl;
+    console.log("imageUrl: ",imageUrl);
+
+    let endpoint = imageUrl ? '/chatWithImage' : '/chat';
+    let requestBody = {
+        message: newInput,
+        trait1: mergedTraits
+    };
+
+    if (imageUrl) {
+        // Add imageUrl to the request body if present
+        requestBody = {...requestBody, imageUrl: imageUrl, userText: newInput};
+    }
+
+    let fetchOptions = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(requestBody)
+    };
+
+    try {
+        const response = await fetch(endpoint, fetchOptions);
+        const data = await response.json();
+        
+        let responseMessage = endpoint === '/chatWithImage' ? `ChatGPT: ${data.message.content}` : `ChatGPT: ${data.choices[0].message.content}`;
+
+        const formattedMessage = marked.parse(responseMessage);
+        messageHistory.push(formattedMessage);
+        updateTopRightArea();
+
+        if (document.getElementById('discussionInOneContainer').checked) {
+            appendMessageToDiscussionContainer(formattedMessage);
+        }
+        
+        // Clear the inputs after sending
+        inputDataElement.value = '';
+        //BUG 0403 document.getElementById('linkInput').value = ''; // Optionally clear the link input
+        // Optionally clear the uploadedImageUrl variable if it's no longer needed
+        //BUG 0403 uploadedImageUrl = "";
+    } catch (error) {
+        console.error('Failed to communicate with the backend.', error);
+    }
+}
+
 
 
 
@@ -499,22 +556,66 @@ linkButton.addEventListener('click', () => {
 
 //04032024
 document.getElementById('fileUploadButton').addEventListener('click', function() {
-    document.getElementById('fileInput').click();
+    document.getElementById('fileInput').click(); // Trigger file selection dialog
 });
 
 document.getElementById('fileInput').addEventListener('change', function() {
     if (this.files && this.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            // Set the src of the imagePreview element to the loaded file
-            console.log('Uploaded image preview URL:', e.target.result);
-            const preview = document.getElementById('imagePreview');
-            preview.src = e.target.result;
-            preview.style.display = 'block'; // Show the preview
-        };
-        reader.readAsDataURL(this.files[0]);
+        const file = this.files[0];
+        
+        // Ensure the file is an image
+        if (file.type.match('image.*')) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const preview = document.getElementById('imagePreview');
+                preview.src = e.target.result; // Preview the selected image
+                preview.style.display = 'block';
+                const base64EncodedImage = e.target.result; // This is your base64-encoded image
+                document.getElementById('linkInput').value = base64EncodedImage; // Assuming you want to use the same input to hold the base64 string
+                
+                // Call uploadFile function right after setting the preview
+                //uploadFile();
+            };
+            
+            reader.readAsDataURL(file); // Start reading the file as DataURL
+        } else {
+            alert('Please select an image file.');
+        }
     }
 });
+
+function uploadFile() {
+    const fileInput = document.getElementById('fileInput');
+    const formData = new FormData();
+
+    if (fileInput.files.length > 0) {
+        formData.append('imageFile', fileInput.files[0]); // Prepare the file for uploading
+
+        fetch('/upload', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('File uploaded successfully!');
+            // Log the URL returned by the server
+            console.log('Upload success:', data);
+            console.log('Uploaded file URL:', data.url); // Assuming 'url' is the key in the response JSON
+            uploadedImageUrl = data.url;
+
+            // Optionally, you could also update some element with the URL
+            // document.getElementById('someElement').textContent = data.url;
+        })
+        .catch((error) => {
+            console.error('Upload error:', error);
+            alert('Upload failed.');
+        });
+    } else {
+        // This alert might not be necessary since the upload is initiated upon file selection
+        alert('Please select a file first.');
+    }
+}
 
 //fix DOM before and after issue
 document.addEventListener('DOMContentLoaded', function() {

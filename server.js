@@ -1,48 +1,44 @@
 require('dotenv').config();
-//import OpenAI from 'openai';
 const OpenAI = require('openai');
-//const marked = require('marked');
-
-
-//import Gemini
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-
-//import Claude
 const Anthropic = require('@anthropic-ai/sdk');
-
 const fs = require('fs');
-const fetch = require('node-fetch');
-
-
+const fetch = require('node-fetch'); // Ensure you are using a version compatible with CommonJS
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const app = express();
+const path = require('path'); // Added to fix the missing import
 
 const PORT = process.env.PORT || 3000;
 const openai = new OpenAI({ apiKey: process.env.CHATGPT_API_KEY });
-
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-//const model = genAI.getGenerativeModel({ model: "gemini-pro"});
-
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_API_KEY });
 
 app.use(fileUpload());
 app.use(express.json());
 app.use(express.static('public'));
+app.use(express.urlencoded({ limit: '500mb', extended: true })); // Increase URL-encoded body limit
+app.use(express.json({ limit: '500mb' })); // Increase JSON body limit
 
+
+// File upload endpoint
 app.post('/upload', (req, res) => {
     if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).send('No files were uploaded.');
+        return res.status(400).send('No files were uploaded.');
     }
     
-    // Access the uploaded file via req.files.<inputFieldName>, e.g., req.files.imageFile
-    const uploadedFile = req.files.imageFile;
+    const uploadedFile = req.files.imageFile; // Adjusted for consistency
+    const uploadPath = path.join(__dirname, 'public/uploads', uploadedFile.name);
     
-    // You can now use the uploadedFile to read its data, save it to disk, or other processing
-    console.log(uploadedFile.name);
-    
-    res.send('File uploaded!');
-  });
+    uploadedFile.mv(uploadPath, function(err) {
+        if (err) return res.status(500).send(err);
+
+        const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${uploadedFile.name}`;
+        console.log('File uploaded:', fileUrl);
+        res.send({message: 'File uploaded!', url: fileUrl});
+    });
+});
+
   
 /*app.post('/chat', async (req, res) => {
     try {
@@ -121,6 +117,7 @@ app.post('/chatWithImage', async (req, res) => {
         res.json(response.choices[0]);
     } catch (error) {
         console.error(error);
+        console.log(error.name, error.message);
         res.status(500).send('Error processing image with ChatGPT4 API');
     }
 });
@@ -165,7 +162,7 @@ app.post('/chatWithUploadFile', async (req, res) => {
         ],
         "max_tokens": 300
     };
-
+    console.log("I AM HERE");
     try {
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
             method: 'POST',
@@ -294,3 +291,4 @@ app.post('/chatWithClaude', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+

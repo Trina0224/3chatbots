@@ -30,7 +30,12 @@ npm install @google/generative-ai
 npm install openai  
 npm install @anthropic-ai/sdk  
 npm install express-fileupload  
-npm install node-fetch
+npm install node-fetch  
+
+npm install  
+
+ps. node-fetch ver. i am usinig is "^2.6.1",  
+
 
 
 
@@ -59,7 +64,9 @@ node .\server.js
 10. ~Put Disable/Enable Chatbot Funcion.~  
 11. ~Add an area for chat in sequencial.~  
 12. Chat in one container is not so good. have to do some improvement.  
-13. Gemini, Claude cannot read image from hyperlink. [https://ai.google.dev/tutorials/get_started_node#generate-text-from-text-and-image-input]
+13. Gemini, Claude cannot read image from hyperlink. [https://ai.google.dev/tutorials/get_started_node#generate-text-from-text-and-image-input]  
+14. Will design photo inputs for Claude.  
+
 
 
 
@@ -69,7 +76,8 @@ node .\server.js
 2. Gemini has limitaion. Have to wait for the pay as you go API Key.  
 3. ~Move inputs handling to processAndDisplayData() from sendData().~
 4. ~Fix human cannot keep silent issue.~  
-5. In script.js L90. will fix this after I add the photo function to Gemini and Claude.  
+5. In script.js (search 'BUG'). will fix this after I add the photo function to Gemini and Claude.  
+6. The code is very dirty and complex. Will clean later. Right now, Gemini can read photo. ChatGPT can read link or photo, but the photo size is not idea. A little small. Will try to solve it later.  
 
 
 
