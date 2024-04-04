@@ -31,7 +31,13 @@
             <div class="input-group">
                 <button id="fileUploadButton" class="link-button">📂</button>
                 <input type="file" id="fileInput" accept=".jpg, .jpeg, .png, .webp, .heic, .heif" style="display: none;" />
-                <img id="imagePreview" src="" alt="Image preview" style="display:none; max-width: 128px; max-height: 128px;">                
+                <!-- Updated image preview container -->
+                <div id="imagePreviewContainer" style="position: relative; display: inline-block;">
+                    <img id="imagePreview" src="" alt="Image preview" style="display:none; max-width: 128px; max-height: 128px;">
+                    <!-- X emoji will be added dynamically via JS -->
+                </div>
+                <!--<img id="imagePreview" src="" alt="Image preview" style="display:none; max-width: 128px; max-height: 128px;">                
+                -->
                 <button id="linkButton" class="link-button">🔗</button>
                 <textarea id="linkInput" class="link-input" placeholder="Enter a link..." style="display: none;"></textarea>
             </div>

@@ -234,3 +234,11 @@ input[type="submit"] {
     border-radius: 4px; /* Slightly rounded corners for a softer look */
     margin-top: 10px; /* Space above the image */
 }
+
+.x-emoji {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    font-size: 24px; /* Adjust size as needed */
+}

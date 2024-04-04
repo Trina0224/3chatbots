@@ -14,11 +14,11 @@ const openai = new OpenAI({ apiKey: process.env.CHATGPT_API_KEY });
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_API_KEY });
 
+app.use(express.urlencoded({ limit: '500mb', extended: true })); // Increase URL-encoded body limit
+app.use(express.json({ limit: '500mb' })); // Increase JSON body limit
 app.use(fileUpload());
 app.use(express.json());
 app.use(express.static('public'));
-app.use(express.urlencoded({ limit: '500mb', extended: true })); // Increase URL-encoded body limit
-app.use(express.json({ limit: '500mb' })); // Increase JSON body limit
 
 
 // File upload endpoint
@@ -122,6 +122,7 @@ app.post('/chatWithImage', async (req, res) => {
     }
 });
 
+/*
 app.post('/chatWithUploadFile', async (req, res) => {
     if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).send('No files were uploaded.');
@@ -177,7 +178,7 @@ app.post('/chatWithUploadFile', async (req, res) => {
         res.status(500).send('Failed to communicate with OpenAI API');
     }
 });
-
+*/
 
 
 /*
@@ -286,6 +287,44 @@ app.post('/chatWithClaude', async (req, res) => {
         res.status(500).send('Error communicating with Claude API');
     }
 });
+
+app.post('/chatWithClaudeImage', async (req, res) => {
+    const { image1_media_type, image1_data, inputMessage } = req.body;
+    const personalityString = req.body.trait3;
+
+    try {
+        const msg = await anthropic.messages.create({
+            model: "claude-3-opus-20240229",
+            system: personalityString,
+            max_tokens: 1024,
+            messages: [
+                {
+                    role: "user",
+                    content: [
+                        {
+                            type: "image",
+                            source: {
+                                type: "base64",
+                                media_type: image1_media_type,
+                                data: image1_data,
+                            },
+                        },
+                        {
+                            type: "text",
+                            text: inputMessage,
+                        }
+                    ],
+                }
+            ],
+        });
+        console.log('Received from Claude Image:', msg);
+        res.json({ msg });
+    } catch (error) {
+        console.error('Failed to communicate with Claude Image API.', error);
+        res.status(500).send('Error communicating with Claude Image API');
+    }
+});
+
 
 
 app.listen(PORT, () => {

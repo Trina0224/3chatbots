@@ -179,25 +179,32 @@ async function sendData() {
 
 
 async function sendData() {
+    const newInput = inputsHistory.length > 0 ? inputsHistory[inputsHistory.length - 1] : '';
+    const bottomLeftLastTwo = bottomLeftMessageHistory.slice(-2).join(' ');
+    const bottomRightLastTwoResponses = bottomRightMessageHistory.slice(-2).join(' ');
+    const message = `${newInput} ${bottomLeftLastTwo} ${bottomRightLastTwoResponses}`;
+    console.log('Sending to ChatGPT:', message);
+
     const inputDataElement = document.getElementById('inputData');
-    let newInput = inputDataElement.value.trim();
+    //const inputDataElement = newInput;//for image, use different prompt. 
+    let newInput_img = inputDataElement.value.trim();
     const trait1Value = document.getElementById('trait1').value;
     const traitCommonValue = document.getElementById('traitCommon').value;
     const mergedTraits = `${trait1Value} ${traitCommonValue}`;
 
     // Use the directly provided URL or the URL from the uploaded file
-    let imageUrl = document.getElementById('linkInput').value.trim() || uploadedImageUrl;
+    let imageUrl = document.getElementById('linkInput').value.trim(); // || uploadedImageUrl;
     console.log("imageUrl: ",imageUrl);
 
     let endpoint = imageUrl ? '/chatWithImage' : '/chat';
     let requestBody = {
-        message: newInput,
+        message: message, //newInput,
         trait1: mergedTraits
     };
 
     if (imageUrl) {
         // Add imageUrl to the request body if present
-        requestBody = {...requestBody, imageUrl: imageUrl, userText: newInput};
+        requestBody = {...requestBody, imageUrl: imageUrl, userText: newInput_img};
     }
 
     let fetchOptions = {
@@ -424,7 +431,7 @@ function updateBottomLeftArea() {
     bottomLeftArea.scrollTop = bottomLeftArea.scrollHeight;
 }
 
-
+/*
 async function sendDataToBottomRight() {
     const latestInput = inputsHistory.slice(-1).join(' '); // Gets the latest input
     const topRightLastTwoResponses = messageHistory.slice(-2).join(' '); 
@@ -468,6 +475,76 @@ async function sendDataToBottomRight() {
         console.error('Failed to communicate with the server.', error);
     }
 }
+*/
+
+async function sendDataToBottomRight() {
+    const latestInput = inputsHistory.slice(-1).join(' '); // Gets the latest input
+    const topRightLastTwoResponses = messageHistory.slice(-2).join(' '); 
+    const bottomLeftLastTwoResponses = bottomLeftMessageHistory.slice(-2).join(' ');
+
+    const message = `${latestInput} ${topRightLastTwoResponses} ${bottomLeftLastTwoResponses}`;
+    console.log('Sending to Claude:', message);
+
+    // Determine if an image has been uploaded and prepare the data
+    const imageUploaded = document.getElementById('fileInput').files.length > 0;
+    let endpoint = '/chatWithClaude'; // Default endpoint
+    let fetchOptions = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            message: message,
+            trait3: `${document.getElementById('trait3').value} ${document.getElementById('traitCommon').value}` // Merging trait3 and traitCommon values
+        }),
+    };
+
+    // If an image is uploaded, switch to the /chatWithClaudeImage endpoint and adjust requestBody
+    if (imageUploaded) {
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            const base64Image = e.target.result.split(',')[1]; // Get the base64 content, remove the prefix
+            endpoint = '/chatWithClaudeImage';
+            fetchOptions.body = JSON.stringify({
+                image1_media_type: document.getElementById('fileInput').files[0].type,
+                image1_data: base64Image,
+                inputMessage: message,
+                trait3: `${document.getElementById('trait3').value} ${document.getElementById('traitCommon').value}`
+            });
+
+            try {
+                const response = await fetch(endpoint, fetchOptions);
+                const data = await response.json();
+                const formattedMessage = marked.parse(`Claude: ${data.msg.content.map(item => item.text).join('\n')}`);
+                bottomRightMessageHistory.push(formattedMessage);
+                updateBottomRightArea();
+
+                if (document.getElementById('discussionInOneContainer').checked) {
+                    appendMessageToDiscussionContainer(formattedMessage);
+                }
+            } catch (error) {
+                console.error('Failed to communicate with Claude Image API.', error);
+            }
+        };
+
+        // Read the file as a data URL to trigger the onload event
+        reader.readAsDataURL(document.getElementById('fileInput').files[0]);
+    } else {
+        // No image uploaded, proceed with sending text only
+        try {
+            const response = await fetch(endpoint, fetchOptions);
+            const data = await response.json();
+            const formattedMessage = marked.parse(`Claude: ${data.msg.content.map(item => item.text).join('\n')}`);
+            bottomRightMessageHistory.push(formattedMessage);
+            updateBottomRightArea();
+
+            if (document.getElementById('discussionInOneContainer').checked) {
+                appendMessageToDiscussionContainer(formattedMessage);
+            }
+        } catch (error) {
+            console.error('Failed to communicate with the Claude API.', error);
+        }
+    }
+}
+
 
 /*
 function updateBottomRightArea(text) {
@@ -569,6 +646,7 @@ document.getElementById('fileInput').addEventListener('change', function() {
             
             reader.onload = function(e) {
                 const preview = document.getElementById('imagePreview');
+                const previewContainer = document.getElementById('imagePreviewContainer');
                 preview.src = e.target.result; // Preview the selected image
                 preview.style.display = 'block';
                 const base64EncodedImage = e.target.result; // This is your base64-encoded image
@@ -576,6 +654,28 @@ document.getElementById('fileInput').addEventListener('change', function() {
                 
                 // Call uploadFile function right after setting the preview
                 //uploadFile();
+                // Create and append the X emoji 04042024.
+                const xEmoji = document.createElement('span');
+                xEmoji.textContent = '❌'; // X emoji
+                xEmoji.classList.add('x-emoji');
+                xEmoji.onclick = function() {
+                    preview.src = ''; // Remove image source
+                    preview.style.display = 'none'; // Hide the image
+                    previewContainer.removeChild(xEmoji); // Remove the X emoji itself
+                    // Clear the file input
+                    document.getElementById('fileInput').value = '';
+
+                    // Clear the textarea
+                    document.getElementById('linkInput').value = '';
+
+                    // Optionally, hide the textarea if it's meant to be toggled with the link button
+                    document.getElementById('linkInput').style.display = 'none';
+                };
+
+                // Append only if an X doesn't already exist
+                if (!previewContainer.querySelector('.x-emoji')) {
+                    previewContainer.appendChild(xEmoji);
+                }
             };
             
             reader.readAsDataURL(file); // Start reading the file as DataURL
@@ -585,6 +685,7 @@ document.getElementById('fileInput').addEventListener('change', function() {
     }
 });
 
+/*
 function uploadFile() {
     const fileInput = document.getElementById('fileInput');
     const formData = new FormData();
@@ -616,6 +717,9 @@ function uploadFile() {
         alert('Please select a file first.');
     }
 }
+*/
+
+
 
 //fix DOM before and after issue
 document.addEventListener('DOMContentLoaded', function() {
