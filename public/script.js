@@ -70,36 +70,7 @@ window.addEventListener('resize', checkScreenAndAdjustCheckbox);
 
 
 
-/*
-document.addEventListener('DOMContentLoaded', function() {
-    // Attach an event listener to the checkbox
-    document.getElementById('discussionInOneContainer').addEventListener('change', function() {
-        toggleDiscussionContainer(this.checked);
-    });
-});
 
-function toggleDiscussionContainer(isChecked) {
-    const discussionContainer = document.getElementById('discussionContainer');
-    const chatContainers = document.querySelectorAll('.top-left, .top-right, .bottom-left, .bottom-right');
-
-    if (isChecked) {
-        // Adjust styles when checked
-        discussionContainer.style.display = 'block';
-        discussionContainer.style.height = '66.67vh'; // 2/3 of the screen height
-        discussionContainer.style.overflowY = 'scroll'; // Ensure it has a vertical scroll
-        chatContainers.forEach(container => {
-            container.style.height = 'calc(33.33vh - 20px)'; // Adjusted to 1/3
-        });
-    } else {
-        // Revert styles when unchecked
-        discussionContainer.style.display = 'none';
-        discussionContainer.style.height = '0';
-        chatContainers.forEach(container => {
-            container.style.removeProperty('height'); // Removes inline height style
-        });
-    }
-}
-*/
 
 // Enhanced toggleDiscussionContainer function
 function toggleDiscussionContainer(isChecked) {
@@ -189,67 +160,6 @@ async function processAndDisplayData() {
     }
 }
 
-/*
-async function sendData() {
-    const newInput = inputsHistory.length > 0 ? inputsHistory[inputsHistory.length - 1] : '';
-    const bottomLeftLastTwo = bottomLeftMessageHistory.slice(-2).join(' ');
-    const bottomRightLastTwoResponses = bottomRightMessageHistory.slice(-2).join(' ');
-    const message = `${newInput} ${bottomLeftLastTwo} ${bottomRightLastTwoResponses}`;
-    console.log('Sending to ChatGPT:', message);
-
-    const linkInput = document.getElementById('linkInput').value.trim(); // Get the link input
-    const trait1Value = document.getElementById('trait1').value;
-    const traitCommonValue = document.getElementById('traitCommon').value;
-    const mergedTraits = `${trait1Value} ${traitCommonValue}`;
-
-    let endpoint = '/chat'; // Default endpoint
-    let requestBody = {
-        message: message,
-        trait1: mergedTraits // System message content
-    };
-
-    // If there's a link, switch to the /chatWithImage endpoint and adjust requestBody
-    if (linkInput) {
-        endpoint = '/chatWithImage';
-        requestBody = {
-            imageUrl: linkInput,
-            userText: message, // The actual user input text
-            trait1: mergedTraits // System message content, shared for consistency
-        };
-    }
-
-    try {
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(requestBody),
-        });
-        const data = await response.json();
-        
-        // Extracting the message content based on the response structure
-        let responseMessage;
-        if (endpoint === '/chatWithImage') {
-            // Directly accessing the 'message.content' for the '/chatWithImage' endpoint response
-            responseMessage = `ChatGPT: ${data.message.content}`;
-        } else {
-            // Assuming '/chat' endpoint returns a structure with 'choices'
-            responseMessage = `ChatGPT: ${data.choices[0].message.content}`;
-        }
-        // Assuming both endpoints return data with similar structure
-        //const responseMessage = endpoint === '/chatWithImage' ? `ChatGPT: ${data.content}` : `ChatGPT: ${data.choices[0].message.content}`;
-        const formattedMessage = marked.parse(responseMessage); // Convert to markdown format.
-        messageHistory.push(formattedMessage); // Store the new message in history
-        
-        updateTopRightArea(); // Call function to update the display
-        
-        if (document.getElementById('discussionInOneContainer').checked) {
-            appendMessageToDiscussionContainer(formattedMessage);
-        }
-    } catch (error) {
-        console.error('Failed to communicate with the chatbot backend.', error);
-    }
-}
-*/
 
 
 async function sendData() {
@@ -316,14 +226,7 @@ async function sendData() {
 
 
 
-/*
-function updateTopRightArea() {
-    const chatbotResponseArea = document.getElementById('chatbotResponse');
-    // Prepend "ChatGPT: " to each message
-    chatbotResponseArea.innerHTML = messageHistory.map(msg => `ChatGPT: ${msg}`).join('<br><br>');
-    chatbotResponseArea.scrollTop = chatbotResponseArea.scrollHeight;
-}
-*/
+
 function updateTopRightArea() {
     const chatbotResponseArea = document.getElementById('chatbotResponse');
     
@@ -355,62 +258,7 @@ function updateTopRightArea() {
 }
 
 
-/*
-async function sendDataToBottomLeft() {
-    //const input = document.getElementById('inputData').value;
-    const latestInput = inputsHistory[inputsHistory.length - 1];
-    // Assuming you're using messageHistory for the top-right area responses
-    const topRightLastTwoResponses = messageHistory.slice(-2).join(' '); 
-    //const bottomRight = document.getElementById('bottomRight').textContent;
-    const bottomRightLastTwoResponses = bottomRightMessageHistory.slice(-2).join(' ');
 
-    //const trait2 = document.getElementById('trait2').value;
-
-
-    
-    
-    const message = `${latestInput} ${topRightLastTwoResponses} ${bottomRightLastTwoResponses}`;
-    //console.log(message);
-    console.log('Sending to Gemini:', message);
-
-    try {
-
-        // Get the values of both elements
-        const trait2Value = document.getElementById('trait2').value;
-        const traitCommonValue = document.getElementById('traitCommon').value;
-
-        // Merge the two strings
-        const mergedTraits = `${trait2Value} ${traitCommonValue}`;
-        //console.log('Preset to Gemini: ',mergedTraits);
-
-        const response = await fetch('/generateWithGemini', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                message: message,
-                trait2: mergedTraits // Gets the content of the textarea
-            }),
-        });
-        const data = await response.json();
-
-        //Update to apped new message to the history
-        //const newMessage = data.text;
-        //console.log('Got from Gemini:', newMessage);
-        const newMessage = `Gemini: ${data.text}`;
-        const newMessage2 = marked.parse(newMessage);
-        bottomLeftMessageHistory.push(newMessage2);
-
-        updateBottomLeftArea();
-        //
-        if (document.getElementById('discussionInOneContainer').checked) {
-            appendMessageToDiscussionContainer(newMessage2); // For sendDataToBottomLeft and sendDataToBottomRight, ensure newMessage2 is the formatted message you intend to append
-        }
-        
-    } catch (error) {
-        console.error('Failed to communicate with the Gemini backend.', error);
-    }
-}
-*/
 
 async function sendDataToBottomLeft() {
     const latestInput = inputsHistory[inputsHistory.length - 1];
@@ -468,15 +316,7 @@ async function sendDataToBottomLeft() {
 }
 
 
-/*
-function updateBottomLeftArea() {
-    const bottomLeftArea = document.getElementById('bottomLeft');
-    bottomLeftArea.innerHTML = bottomLeftMessageHistory.join('<br><br>'); // Join messages with breaks
-    
-    // Scroll to the bottom of the area to show the latest message
-    bottomLeftArea.scrollTop = bottomLeftArea.scrollHeight;
-}
-*/
+
 function updateBottomLeftArea() {
     const bottomLeftArea = document.getElementById('bottomLeft');
     
@@ -506,51 +346,7 @@ function updateBottomLeftArea() {
     bottomLeftArea.scrollTop = bottomLeftArea.scrollHeight;
 }
 
-/*
-async function sendDataToBottomRight() {
-    const latestInput = inputsHistory.slice(-1).join(' '); // Gets the latest input
-    const topRightLastTwoResponses = messageHistory.slice(-2).join(' '); 
-    const bottomLeftLastTwoResponses = bottomLeftMessageHistory.slice(-2).join(' ');
 
-    //const trait3 = document.getElementById('trait3').value;
-    
-    const message = `${latestInput} ${topRightLastTwoResponses} ${bottomLeftLastTwoResponses}`;
-    console.log('Sending to Claude:', message);
-
-    try {
-        // Get the values of both elements
-        const trait3Value = document.getElementById('trait3').value;
-        const traitCommonValue = document.getElementById('traitCommon').value;
-
-        // Merge the two strings
-        const mergedTraits = `${trait3Value} ${traitCommonValue}`;
-        //console.log('Preset to Claude: ',mergedTraits);
-        
-        const response = await fetch('/chatWithClaude', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                message: message,
-                trait3: mergedTraits // Gets the content of the textarea
-            }),
-        });
-        const data = await response.json();
-        // Adjust the path to access the nested text based on the Claude response structure
-        //const claudeResponseText = data.msg.content.map(item => item.text).join('\n');
-        const claudeResponseText = `Claude: ${data.msg.content.map(item => item.text).join('\n')}`;
-        const claudeResponseText2 = marked.parse(claudeResponseText);
-        bottomRightMessageHistory.push(claudeResponseText2);
-        //updateBottomRightArea(claudeResponseText2); // Update the bottom-right area with the response
-        updateBottomRightArea();
-        //
-        if (document.getElementById('discussionInOneContainer').checked) {
-            appendMessageToDiscussionContainer(claudeResponseText2); // For sendDataToBottomLeft and sendDataToBottomRight, ensure newMessage2 is the formatted message you intend to append
-        }
-    } catch (error) {
-        console.error('Failed to communicate with the server.', error);
-    }
-}
-*/
 
 async function sendDataToBottomRight() {
     const latestInput = inputsHistory.slice(-1).join(' '); // Gets the latest input
@@ -623,13 +419,7 @@ async function sendDataToBottomRight() {
 }
 
 
-/*
-function updateBottomRightArea(text) {
-    const bottomRightArea = document.getElementById('bottomRight');
-    bottomRightArea.innerHTML += `${text}<br><br>`; // Append new message
-    bottomRightArea.scrollTop = bottomRightArea.scrollHeight; // Scroll to the latest message
-}
-*/
+
 function updateBottomRightArea() {
     const bottomRightArea = document.getElementById('bottomRight');
 
@@ -762,39 +552,7 @@ document.getElementById('fileInput').addEventListener('change', function() {
     }
 });
 
-/*
-function uploadFile() {
-    const fileInput = document.getElementById('fileInput');
-    const formData = new FormData();
 
-    if (fileInput.files.length > 0) {
-        formData.append('imageFile', fileInput.files[0]); // Prepare the file for uploading
-
-        fetch('/upload', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert('File uploaded successfully!');
-            // Log the URL returned by the server
-            console.log('Upload success:', data);
-            console.log('Uploaded file URL:', data.url); // Assuming 'url' is the key in the response JSON
-            uploadedImageUrl = data.url;
-
-            // Optionally, you could also update some element with the URL
-            // document.getElementById('someElement').textContent = data.url;
-        })
-        .catch((error) => {
-            console.error('Upload error:', error);
-            alert('Upload failed.');
-        });
-    } else {
-        // This alert might not be necessary since the upload is initiated upon file selection
-        alert('Please select a file first.');
-    }
-}
-*/
 
 
 

@@ -65,9 +65,10 @@ node .\server.js
 9. ~white out history and hightlight current messages.~  
 10. ~Put Disable/Enable Chatbot Funcion.~  
 11. ~Add an area for chat in sequencial.~  
-12. Chat in one container is not so good. have to do some improvement.  
+12. ~Chat in one container is not so good. have to do some improvement.~    
 13. Gemini, Claude cannot read image from hyperlink.    
 14. ~Will design photo inputs for Claude.~  
+15. Claude API always take long time to resposne in the bay area. Can put some waiting hints or something...  
 
 
 
