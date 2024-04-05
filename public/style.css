@@ -242,3 +242,17 @@ input[type="submit"] {
     cursor: pointer;
     font-size: 24px; /* Adjust size as needed */
 }
+
+@media (max-width: 576px) {
+    /* Assuming .container wraps all four containers and they're flex items */
+    .container {
+        flex-direction: column;
+    }
+
+    .top-left, .top-right, .bottom-left, .bottom-right {
+        width: 100%; /* Make each container take the full width */
+        /* Reset any margins, floats, or other properties that might affect stacking */
+    }
+
+    /* Additional styles for small screens */
+}

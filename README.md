@@ -49,6 +49,8 @@ node .\server.js
 03/24/2024 Initial Draft.  
 03/25/2024 Integrated Claude.  
 03/30/2024 Fixed some issues and posted to X for sharing.  
+04/05/2024 Responsive Viewport  
+
 
 
 ## To Do  

@@ -25,18 +25,52 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleLabel('enableGemini', 'labelGemini', 'Mute Gemini', 'Unmute Gemini');
     toggleLabel('enableClaude', 'labelClaude', 'Mute Claude', 'Unmute Claude');
 
+    // ChatGPT
     document.getElementById('enableChatGPT').addEventListener('change', function() {
         toggleLabel('enableChatGPT', 'labelChatGPT', 'Mute ChatGPT', 'Unmute ChatGPT');
+        toggleContainerVisibility('top-left', this.checked);
     });
+
+    // Gemini
     document.getElementById('enableGemini').addEventListener('change', function() {
         toggleLabel('enableGemini', 'labelGemini', 'Mute Gemini', 'Unmute Gemini');
+        toggleContainerVisibility('bottom-left', this.checked);
     });
+
+    // Claude
     document.getElementById('enableClaude').addEventListener('change', function() {
         toggleLabel('enableClaude', 'labelClaude', 'Mute Claude', 'Unmute Claude');
+        toggleContainerVisibility('bottom-right', this.checked);
     });
 });
 
+// Function to toggle the visibility of chatbot containers
+function toggleContainerVisibility(containerId, isVisible) {
+    const container = document.querySelector('.' + containerId);
+    if (container) {
+        container.style.display = isVisible ? 'block' : 'none';
+    }
+}
 
+function checkScreenAndAdjustCheckbox() {
+    const discussionCheckbox = document.getElementById('discussionInOneContainer');
+    if (window.innerWidth <= 576) {
+        discussionCheckbox.checked = true;
+        toggleDiscussionContainer(true); // Assuming this is the function you've implemented to show/hide containers
+    } else {
+        // Do not automatically uncheck to respect the user's choice. Optionally, add logic here if needed.
+    }
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', checkScreenAndAdjustCheckbox);
+
+// Run on window resize
+window.addEventListener('resize', checkScreenAndAdjustCheckbox);
+
+
+
+/*
 document.addEventListener('DOMContentLoaded', function() {
     // Attach an event listener to the checkbox
     document.getElementById('discussionInOneContainer').addEventListener('change', function() {
@@ -65,6 +99,45 @@ function toggleDiscussionContainer(isChecked) {
         });
     }
 }
+*/
+
+// Enhanced toggleDiscussionContainer function
+function toggleDiscussionContainer(isChecked) {
+    const discussionContainer = document.getElementById('discussionContainer');
+    // Define selectors for the containers and their corresponding checkboxes
+    const containersInfo = [
+        { container: '.top-right', checkbox: 'enableChatGPT' },
+        { container: '.bottom-left', checkbox: 'enableGemini' },
+        { container: '.bottom-right', checkbox: 'enableClaude' }
+    ];
+
+    if (isChecked) {
+        // Show the discussionContainer and hide others
+        discussionContainer.style.display = 'block';
+        containersInfo.forEach(info => {
+            document.querySelector(info.container).style.display = 'none';
+        });
+    } else {
+        // Hide the discussionContainer
+        discussionContainer.style.display = 'none';
+        // Check each chatbot's mute/unmute status before deciding to show its container
+        containersInfo.forEach(info => {
+            const checkbox = document.getElementById(info.checkbox);
+            const container = document.querySelector(info.container);
+            // Show the container only if its corresponding checkbox is checked (unmuted)
+            container.style.display = checkbox.checked ? 'block' : 'none';
+        });
+    }
+}
+
+// Ensure the event listener for "Discussion in one container" checkbox is set up correctly
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('discussionInOneContainer').addEventListener('change', function() {
+        toggleDiscussionContainer(this.checked);
+    });
+});
+
+
 
 
 
@@ -83,9 +156,10 @@ async function processAndDisplayData() {
     // Add the newInput to the inputsHistory array regardless of its state
     inputsHistory.push(newInput);
     //
-    if (document.getElementById('discussionInOneContainer').checked) {
-        appendMessageToDiscussionContainer(newInput); // For sendDataToBottomLeft and sendDataToBottomRight, ensure newMessage2 is the formatted message you intend to append
-    }
+    //if (document.getElementById('discussionInOneContainer').checked) {
+    //    appendMessageToDiscussionContainer(newInput); // For sendDataToBottomLeft and sendDataToBottomRight, ensure newMessage2 is the formatted message you intend to append
+    //}
+    appendMessageToDiscussionContainer(newInput);
 
     // Clear the textarea
     inputElement.value = '';
@@ -223,10 +297,10 @@ async function sendData() {
         messageHistory.push(formattedMessage);
         updateTopRightArea();
 
-        if (document.getElementById('discussionInOneContainer').checked) {
-            appendMessageToDiscussionContainer(formattedMessage);
-        }
-        
+        //if (document.getElementById('discussionInOneContainer').checked) {
+        //    appendMessageToDiscussionContainer(formattedMessage);
+        //}
+        appendMessageToDiscussionContainer(formattedMessage);
         // Clear the inputs after sending
         inputDataElement.value = '';
         //BUG 0403 document.getElementById('linkInput').value = ''; // Optionally clear the link input
@@ -384,9 +458,10 @@ async function sendDataToBottomLeft() {
         bottomLeftMessageHistory.push(formattedMessage);
         updateBottomLeftArea();
 
-        if (document.getElementById('discussionInOneContainer').checked) {
-            appendMessageToDiscussionContainer(formattedMessage);
-        }
+        //if (document.getElementById('discussionInOneContainer').checked) {
+        //    appendMessageToDiscussionContainer(formattedMessage);
+        //}
+        appendMessageToDiscussionContainer(formattedMessage);
     } catch (error) {
         console.error('Failed to communicate with the Gemini backend.', error);
     }
@@ -517,9 +592,10 @@ async function sendDataToBottomRight() {
                 bottomRightMessageHistory.push(formattedMessage);
                 updateBottomRightArea();
 
-                if (document.getElementById('discussionInOneContainer').checked) {
-                    appendMessageToDiscussionContainer(formattedMessage);
-                }
+                //if (document.getElementById('discussionInOneContainer').checked) {
+                //    appendMessageToDiscussionContainer(formattedMessage);
+                //}
+                appendMessageToDiscussionContainer(formattedMessage);
             } catch (error) {
                 console.error('Failed to communicate with Claude Image API.', error);
             }
@@ -536,9 +612,10 @@ async function sendDataToBottomRight() {
             bottomRightMessageHistory.push(formattedMessage);
             updateBottomRightArea();
 
-            if (document.getElementById('discussionInOneContainer').checked) {
-                appendMessageToDiscussionContainer(formattedMessage);
-            }
+            //if (document.getElementById('discussionInOneContainer').checked) {
+            //    appendMessageToDiscussionContainer(formattedMessage);
+            //}
+            appendMessageToDiscussionContainer(formattedMessage);
         } catch (error) {
             console.error('Failed to communicate with the Claude API.', error);
         }
