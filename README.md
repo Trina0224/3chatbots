@@ -50,6 +50,7 @@ node .\server.js
 03/25/2024 Integrated Claude.  
 03/30/2024 Fixed some issues and posted to X for sharing.  
 04/05/2024 Responsive Viewport  
+04/06/2024 index_V1.html, style_V1.css were archived.  
 
 
 
@@ -68,7 +69,10 @@ node .\server.js
 12. ~Chat in one container is not so good. have to do some improvement.~    
 13. Gemini, Claude cannot read image from hyperlink.    
 14. ~Will design photo inputs for Claude.~  
-15. Claude API always take long time to resposne in the bay area. Can put some waiting hints or something...  
+15. ~Claude API always take long time to resposne in the bay area. Can put some waiting hints or something...~    
+16. Use different colors for different chatbots.  
+17. They don't seem to like talking to me much and tend to deliberately ignore some of the things I want to say. They are more interetsed to talk to each other. I will try to do some modification.  
+
 
 
 
@@ -80,7 +84,9 @@ node .\server.js
 3. ~Move inputs handling to processAndDisplayData() from sendData().~
 4. ~Fix human cannot keep silent issue.~  
 5. In script.js (search 'BUG'). will fix this after I add the photo function to Gemini and Claude.  
-6. The code is very dirty and complex. Will clean later. ~Right now, Gemini can read photo. ChatGPT can read link or photo, but the photo size is not idea. A little small. Will try to solve it later.~  
+6. ~Right now, Gemini can read photo. ChatGPT can read link or photo, but the photo size is not idea. A little small. Will try to solve it later.~  
+7. how to remove the old picture?  
+
 
 
 

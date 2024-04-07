@@ -129,16 +129,10 @@ input[type="submit"] {
 
 .landing-page {
     text-align: center;
-    background-image: url('background.webp'); 
+    background-image: url('DALL·E 2024-03-28 22.55.27 - A serene and inviting digital landscape, incorporating futuristic elements like holographic interfaces and robots in the background, blending with a n.webp'); 
     background-size: cover;
     color: #fff; /* White text color */
     padding: 100px 20px; /* Adjust padding as needed */
-    height: 100vh; /* 100% of the viewport height */
-    width: 100vw; /* 100% of the viewport width */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .landing-page h1 {
@@ -147,7 +141,7 @@ input[type="submit"] {
 }
 
 .landing-page p {
-    color: #ddd; /*#333;*/
+    color: #333;
     margin-bottom: 30px;
     font-size: 1.2em;
     text-shadow: 2px 2px 8px rgba(255,255,255,0.5); /* Adds a subtle white shadow for depth */
@@ -270,7 +264,6 @@ input[type="submit"] {
     width: 20px;
     height: 20px;
     animation: spin 2s linear infinite;
-    display: none;
   }
   
   @keyframes spin {

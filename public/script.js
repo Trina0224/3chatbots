@@ -5,7 +5,7 @@ let bottomLeftMessageHistory = [];
 let inputsHistory = [];
 let bottomRightMessageHistory = [];
 let sortedBotsByOutputLength = [];
-let uploadedImageUrl = "";
+let uploadedImageUrl = ""; //looks like this line is useless.
 
 
 function toggleLabel(checkboxId, labelId, muteText, unmuteText) {
@@ -160,6 +160,12 @@ async function processAndDisplayData() {
     }
 }
 
+function toggleLoader(show) {
+    const loader = document.querySelector('.loader');
+    if (loader) {
+        loader.style.display = show ? 'block' : 'none';
+    }
+}
 
 
 async function sendData() {
@@ -196,7 +202,7 @@ async function sendData() {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(requestBody)
     };
-
+    toggleLoader(true); 
     try {
         const response = await fetch(endpoint, fetchOptions);
         const data = await response.json();
@@ -218,12 +224,10 @@ async function sendData() {
         //BUG 0403 uploadedImageUrl = "";
     } catch (error) {
         console.error('Failed to communicate with the backend.', error);
+    } finally {
+        toggleLoader(false); // Hide the loader after receiving the response or in case of an error
     }
 }
-
-
-
-
 
 
 
@@ -296,7 +300,7 @@ async function sendDataToBottomLeft() {
             // Headers are not set explicitly; the browser will set the Content-Type to multipart/form-data and include the boundary automatically
         };
     }
-
+    toggleLoader(true); // Show the loader
     try {
         const response = await fetch(endpoint, fetchOptions);
         const data = await response.json();
@@ -312,6 +316,8 @@ async function sendDataToBottomLeft() {
         appendMessageToDiscussionContainer(formattedMessage);
     } catch (error) {
         console.error('Failed to communicate with the Gemini backend.', error);
+    } finally {
+        toggleLoader(false); // Hide the loader
     }
 }
 
@@ -367,7 +373,7 @@ async function sendDataToBottomRight() {
             trait3: `${document.getElementById('trait3').value} ${document.getElementById('traitCommon').value}` // Merging trait3 and traitCommon values
         }),
     };
-
+    toggleLoader(true); // Show the loader
     // If an image is uploaded, switch to the /chatWithClaudeImage endpoint and adjust requestBody
     if (imageUploaded) {
         const reader = new FileReader();
@@ -394,6 +400,8 @@ async function sendDataToBottomRight() {
                 appendMessageToDiscussionContainer(formattedMessage);
             } catch (error) {
                 console.error('Failed to communicate with Claude Image API.', error);
+            } finally {
+                toggleLoader(false); // Hide the loader
             }
         };
 
@@ -414,6 +422,8 @@ async function sendDataToBottomRight() {
             appendMessageToDiscussionContainer(formattedMessage);
         } catch (error) {
             console.error('Failed to communicate with the Claude API.', error);
+        } finally {
+            toggleLoader(false); // Hide the loader
         }
     }
 }
