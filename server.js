@@ -40,23 +40,7 @@ app.post('/upload', (req, res) => {
 });
 
   
-/*app.post('/chat', async (req, res) => {
-    try {
-        const params = {
-            model: 'gpt-3.5-turbo', // Adjust model as needed
-            messages: [{
-                role: 'user', 
-                content: req.body.message // Ensure this matches the incoming request
-            }],
-        };
-        const chatCompletion = await openai.chat.completions.create(params);
-        res.json(chatCompletion);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error communicating with ChatGPT API');
-    }
-});
-*/
+
 app.post('/chat', async (req, res) => {
     try {
         // Assuming the textarea content is sent in the request body under "trait1"
@@ -122,80 +106,8 @@ app.post('/chatWithImage', async (req, res) => {
     }
 });
 
-/*
-app.post('/chatWithUploadFile', async (req, res) => {
-    if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).send('No files were uploaded.');
-    }
-
-    // This assumes the client sends the text as 'userText' in the body
-    const userText = req.body.userText;
-
-    // Access the uploaded file via req.files.<inputFieldName>, e.g., req.files.uploadedImage
-    const uploadedFile = req.files.uploadedImage;
-    const base64Image = uploadedFile.data.toString('base64');
-    const mimeType = uploadedFile.mimetype;
-
-    const OPENAI_API_KEY = process.env.CHATGPT_API_KEY;
-    const headers = {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENAI_API_KEY}`
-    };
-
-    const payload = {
-        "model": "gpt-4-vision-preview",
-        "messages": [
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": userText // Use the userText from the request body
-                    },
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": `data:${mimeType};base64,${base64Image}`
-                        }
-                    }
-                ]
-            }
-        ],
-        "max_tokens": 300
-    };
-    console.log("I AM HERE");
-    try {
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(payload)
-        });
-
-        const responseData = await response.json();
-        res.send(responseData);
-    } catch (error) {
-        console.error('Error making API request:', error);
-        res.status(500).send('Failed to communicate with OpenAI API');
-    }
-});
-*/
 
 
-/*
-app.post('/generateWithGemini', async (req, res) => {
-    try {
-        const prompt = req.body.message;
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = await response.text(); // Assuming response.text() returns a promise
-        res.json({ text });
-        //console.log(text);
-    } catch (error) {
-        console.error('Failed to communicate with Gemini API.', error);
-        res.status(500).send('Error communicating with Gemini API');
-    }
-});
-*/
 app.post('/generateWithGemini', async (req, res) => {
     try {
         const userPrompt = req.body.message;

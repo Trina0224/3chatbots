@@ -127,9 +127,6 @@ async function processAndDisplayData() {
     // Add the newInput to the inputsHistory array regardless of its state
     inputsHistory.push(newInput);
     //
-    //if (document.getElementById('discussionInOneContainer').checked) {
-    //    appendMessageToDiscussionContainer(newInput); // For sendDataToBottomLeft and sendDataToBottomRight, ensure newMessage2 is the formatted message you intend to append
-    //}
     appendMessageToDiscussionContainer(newInput, "Human");
 
     // Clear the textarea
@@ -213,9 +210,6 @@ async function sendData() {
         messageHistory.push(formattedMessage);
         updateTopRightArea();
 
-        //if (document.getElementById('discussionInOneContainer').checked) {
-        //    appendMessageToDiscussionContainer(formattedMessage);
-        //}
         appendMessageToDiscussionContainer(formattedMessage, "ChatGPT");
         // Clear the inputs after sending
         inputDataElement.value = '';
@@ -310,9 +304,6 @@ async function sendDataToBottomLeft() {
         bottomLeftMessageHistory.push(formattedMessage);
         updateBottomLeftArea();
 
-        //if (document.getElementById('discussionInOneContainer').checked) {
-        //    appendMessageToDiscussionContainer(formattedMessage);
-        //}
         appendMessageToDiscussionContainer(formattedMessage, "Gemini");
     } catch (error) {
         console.error('Failed to communicate with the Gemini backend.', error);
@@ -394,9 +385,6 @@ async function sendDataToBottomRight() {
                 bottomRightMessageHistory.push(formattedMessage);
                 updateBottomRightArea();
 
-                //if (document.getElementById('discussionInOneContainer').checked) {
-                //    appendMessageToDiscussionContainer(formattedMessage);
-                //}
                 appendMessageToDiscussionContainer(formattedMessage, "Claude");
             } catch (error) {
                 console.error('Failed to communicate with Claude Image API.', error);
@@ -416,9 +404,6 @@ async function sendDataToBottomRight() {
             bottomRightMessageHistory.push(formattedMessage);
             updateBottomRightArea();
 
-            //if (document.getElementById('discussionInOneContainer').checked) {
-            //    appendMessageToDiscussionContainer(formattedMessage);
-            //}
             appendMessageToDiscussionContainer(formattedMessage, "Claude");
         } catch (error) {
             console.error('Failed to communicate with the Claude API.', error);
@@ -460,30 +445,7 @@ function updateBottomRightArea() {
 }
 
 
-/*
-function appendMessageToDiscussionContainer(message) {
-    const discussionContainer = document.getElementById('discussionContainer');
-    const messageDiv = document.createElement('div');
-    messageDiv.innerHTML = message;
 
-    // Determine the source of the message and apply the corresponding color
-    if (message.includes("ChatGPT:")) {
-        messageDiv.style.color = "#80A79D"; // Color for ChatGPT
-    } else if (message.includes("Claude:")) {
-        messageDiv.style.color = "#CC7C5E"; // Color for Claude
-    } else if (message.includes("Gemini:")) {
-        messageDiv.style.color = "#5889D0"; // Color for Gemini
-    }
-
-    discussionContainer.appendChild(messageDiv);
-    
-    // Ensure discussionContainer can scroll vertically
-    discussionContainer.style.overflowY = 'auto';
-
-    // Scroll to the bottom of the container to show the latest message
-    discussionContainer.scrollTop = discussionContainer.scrollHeight;
-}
-*/
 function appendMessageToDiscussionContainer(message, botName) {
     const discussionContainer = document.getElementById('discussionContainer');
     const messageDiv = document.createElement('div');
@@ -507,10 +469,10 @@ function appendMessageToDiscussionContainer(message, botName) {
 
     discussionContainer.appendChild(messageDiv);
     
-    // vertical bar
+    // Ensure discussionContainer can scroll vertically
     discussionContainer.style.overflowY = 'auto';
 
-    // move to bottom of the container. 
+    // Scroll to the bottom of the container to show the latest message 
     discussionContainer.scrollTop = discussionContainer.scrollHeight;
 }
 
