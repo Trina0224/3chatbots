@@ -130,7 +130,7 @@ async function processAndDisplayData() {
     //if (document.getElementById('discussionInOneContainer').checked) {
     //    appendMessageToDiscussionContainer(newInput); // For sendDataToBottomLeft and sendDataToBottomRight, ensure newMessage2 is the formatted message you intend to append
     //}
-    appendMessageToDiscussionContainer(newInput);
+    appendMessageToDiscussionContainer(newInput, "Human");
 
     // Clear the textarea
     inputElement.value = '';
@@ -216,7 +216,7 @@ async function sendData() {
         //if (document.getElementById('discussionInOneContainer').checked) {
         //    appendMessageToDiscussionContainer(formattedMessage);
         //}
-        appendMessageToDiscussionContainer(formattedMessage);
+        appendMessageToDiscussionContainer(formattedMessage, "ChatGPT");
         // Clear the inputs after sending
         inputDataElement.value = '';
         //BUG 0403 document.getElementById('linkInput').value = ''; // Optionally clear the link input
@@ -313,7 +313,7 @@ async function sendDataToBottomLeft() {
         //if (document.getElementById('discussionInOneContainer').checked) {
         //    appendMessageToDiscussionContainer(formattedMessage);
         //}
-        appendMessageToDiscussionContainer(formattedMessage);
+        appendMessageToDiscussionContainer(formattedMessage, "Gemini");
     } catch (error) {
         console.error('Failed to communicate with the Gemini backend.', error);
     } finally {
@@ -397,7 +397,7 @@ async function sendDataToBottomRight() {
                 //if (document.getElementById('discussionInOneContainer').checked) {
                 //    appendMessageToDiscussionContainer(formattedMessage);
                 //}
-                appendMessageToDiscussionContainer(formattedMessage);
+                appendMessageToDiscussionContainer(formattedMessage, "Claude");
             } catch (error) {
                 console.error('Failed to communicate with Claude Image API.', error);
             } finally {
@@ -419,7 +419,7 @@ async function sendDataToBottomRight() {
             //if (document.getElementById('discussionInOneContainer').checked) {
             //    appendMessageToDiscussionContainer(formattedMessage);
             //}
-            appendMessageToDiscussionContainer(formattedMessage);
+            appendMessageToDiscussionContainer(formattedMessage, "Claude");
         } catch (error) {
             console.error('Failed to communicate with the Claude API.', error);
         } finally {
@@ -460,11 +460,21 @@ function updateBottomRightArea() {
 }
 
 
-//
+/*
 function appendMessageToDiscussionContainer(message) {
     const discussionContainer = document.getElementById('discussionContainer');
     const messageDiv = document.createElement('div');
     messageDiv.innerHTML = message;
+
+    // Determine the source of the message and apply the corresponding color
+    if (message.includes("ChatGPT:")) {
+        messageDiv.style.color = "#80A79D"; // Color for ChatGPT
+    } else if (message.includes("Claude:")) {
+        messageDiv.style.color = "#CC7C5E"; // Color for Claude
+    } else if (message.includes("Gemini:")) {
+        messageDiv.style.color = "#5889D0"; // Color for Gemini
+    }
+
     discussionContainer.appendChild(messageDiv);
     
     // Ensure discussionContainer can scroll vertically
@@ -473,6 +483,39 @@ function appendMessageToDiscussionContainer(message) {
     // Scroll to the bottom of the container to show the latest message
     discussionContainer.scrollTop = discussionContainer.scrollHeight;
 }
+*/
+function appendMessageToDiscussionContainer(message, botName) {
+    const discussionContainer = document.getElementById('discussionContainer');
+    const messageDiv = document.createElement('div');
+    messageDiv.innerHTML = message;
+
+    // change text color by botName
+    switch (botName) {
+        case "ChatGPT":
+            messageDiv.style.color = "#80A79D"; // Color for ChatGPT 
+            break;
+        case "Claude":
+            messageDiv.style.color = "#CC7C5E"; // Color for Claude 
+            break;
+        case "Gemini":
+            messageDiv.style.color = "#5889D0"; // Color for Gemini
+            break;
+        default:
+            // default color for all others.
+            break;
+    }
+
+    discussionContainer.appendChild(messageDiv);
+    
+    // vertical bar
+    discussionContainer.style.overflowY = 'auto';
+
+    // move to bottom of the container. 
+    discussionContainer.scrollTop = discussionContainer.scrollHeight;
+}
+
+
+
 
 
 async function compareAndSortOutputLengths() {

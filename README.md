@@ -70,7 +70,7 @@ node .\server.js
 13. Gemini, Claude cannot read image from hyperlink.    
 14. ~Will design photo inputs for Claude.~  
 15. ~Claude API always take long time to resposne in the bay area. Can put some waiting hints or something...~    
-16. Use different colors for different chatbots.  
+16. ~Use different colors for different chatbots.~ Only at Discussion in one container mode.  
 17. They don't seem to like talking to me much and tend to deliberately ignore some of the things I want to say. They are more interetsed to talk to each other. I will try to do some modification.  
 
 
