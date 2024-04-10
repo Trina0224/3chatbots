@@ -464,6 +464,7 @@ function appendMessageToDiscussionContainer(message, botName) {
             break;
         default:
             // default color for all others.
+            messageDiv.style.color = "#F8F8F8";
             break;
     }
 

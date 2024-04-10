@@ -88,7 +88,8 @@ input[type="submit"] {
     height: calc(100% - 100px); /* Adjust based on your layout */
     margin: 10px 0;
     padding: 5px;
-    border: 1px solid #8E9AAF; /* Visual boundary for the old inputs */
+    border: 1px solid #040404; /*#8E9AAF;  Visual boundary for the old inputs */
+    color: #55697c;
 }
 
 #inputData {
