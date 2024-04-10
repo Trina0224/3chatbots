@@ -12,7 +12,8 @@ body, html {
     font-family: Arial, sans-serif;
     box-sizing: border-box;
     scroll-behavior: smooth;
-    background-color: #8E9AAF;
+    /*background-color: #8E9AAF;*/
+    background-color: #040404;
 }
 
 .container {
@@ -137,7 +138,7 @@ input[type="submit"] {
     text-align: center;
     background-image: url('background.webp'); 
     background-size: cover;
-    color: #fff; /* White text color */
+    color: #F8F8F8; /* White text color */
     padding: 100px 20px; /* Adjust padding as needed */
     height: 100vh; /* 100% of the viewport height */
     width: 100vw; /* 100% of the viewport width */
@@ -164,7 +165,7 @@ input[type="submit"] {
 
 .btn-start {
     background-color: #007bff; /* Bootstrap primary button color for reference */
-    color: #fff;
+    color: #F8F8F8;
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none; /* Remove underline from link */
@@ -214,6 +215,12 @@ input[type="submit"] {
 
 }
 
+.enable-disable-chatbot h2,
+.enable-disable-chatbot label {
+    color: #F8F8F8;
+}
+
+
 .old-message {
     color: #808080; /* Gray out the old messages */
 }
@@ -230,6 +237,24 @@ input[type="submit"] {
     /* Add other styling as needed */
     background-color: #FEEAFA
 }
+
+
+.container .top-right,
+.container .top-left,
+.container .bottom-left,
+.container .bottom-right,
+.discussion-container {
+    border-radius: 20px; /* Adjust as needed for roundness */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Semi-transparent white border */
+    box-shadow:
+        0 0 5px rgba(0, 174, 255, 0.5), /* Inner light blue glow */
+        0 0 15px rgba(0, 174, 255, 0.4), /* Mid blue glow */
+        0 0 30px rgba(0, 174, 255, 0.3), /* Outer deep blue glow */
+        0 0 60px rgba(0, 174, 255, 0.2); /* Distant glow */
+    background: rgba(0, 0, 0, 0.4); /* Dark background to see the glow */
+    /* Other styles such as padding, margin, etc. */
+}
+
 
 .input-group {
     display: flex;
@@ -303,3 +328,24 @@ input[type="submit"] {
     100% { transform: rotate(360deg); }
   }
   
+/*
+#1E1E1E
+#373737
+#414141
+#6D6D6D
+#757575
+#828282
+#9E9E9E
+#BDBDBD
+#D0D0D0
+#E0E0E0
+#F2F2F2
+#FFFFFF 
+
+#040404 - Very dark, almost black background color 
+#0D1117 - Dark navy blue used in the background shapes and header bar 
+#58A6FF - Bright neon blue used for highlights and interface elements 
+#BC87DE - Vibrant neon purple accent color 
+#F472D0 - Vivid neon pink accent color 
+#FFFFFF - White text and user interface elements
+*/
