@@ -34,7 +34,7 @@ npm install node-fetch
 
 npm install  
 
-ps. node-fetch ver. i am usinig is "^2.6.1",  
+ps. node-fetch ver. i am usinig "^2.6.1",  
 
 
 
