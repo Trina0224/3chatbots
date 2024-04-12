@@ -100,11 +100,6 @@ input[type="submit"] {
     resize: vertical; /* Allows vertical resizing */
 }
 
-.personality-container {
-    margin-top: 20px; /* Adds space above the personality container */
-    border: 2px solid #000; /* Creates a solid border */
-    padding: 20px; /* Adds padding inside the container */
-}
 
 .input-group label {
     display: block; /* Makes the label display on its own line */
@@ -113,27 +108,34 @@ input[type="submit"] {
 }
 
 .input-group textarea {
-    width: calc(100% - 20px); /* Ensures the textarea fits its container, accounting for padding */
+    /*width: calc(100% - 20px);*/ /* Ensures the textarea fits its container, accounting for padding */
     margin-top: 5px; /* Adds space above the textarea */
+
+    background: rgba(255, 255, 255, 0.05); /* slightly darker background for the textarea */
+    /*border: none;*/ /* remove borders */
+    color: #fff; /* white text color */
+    padding: 10px; /* padding inside the textarea */
+
+    width: 80%; /* adjust width to make textarea smaller */
+    height: 60px; /* set a fixed height */
+    margin: 10px auto; /* centering the textarea */
+    border-radius: 15px; /* rounded corners */
+    border: 2px solid transparent; /* prepares for gradient border */
+    background-clip: padding-box; /* prevents background from bleeding outside the border */
+    transition: border 0.3s, box-shadow 0.3s; /* smooth transition for focus effects */
+    
 }
 
-.description-container {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f0f0f0; /* Light gray background */
-    border-radius: 5px; /* Slightly rounded corners for a modern look */
+.input-group textarea:hover, .input-group textarea:focus {
+    outline: none; /* remove outline on focus */
+    border-color: transparent; /* keep border transparent on focus and hover */
+    box-shadow: 0 0 8px #fc0fc0; /* glow effect when focused or hovered */
+}
+/* Neon effect for the border when not focused */
+.input-group textarea {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.75), 0 0 10px rgba(255, 192, 203, 0.75); /* white to pink shadow for neon effect */
 }
 
-.description-container h2 {
-    color: #333; /* Dark gray for contrast */
-    margin-bottom: 10px;
-}
-
-.description-container p {
-    color: #666; /* Medium gray for the text */
-    margin-bottom: 10px;
-    line-height: 1.6; /* Improve readability */
-}
 
 .landing-page {
     text-align: center;
@@ -183,33 +185,74 @@ input[type="submit"] {
     font-family: 'Electrolize', sans-serif;
 }
 
-
-.site-footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #FEEAFA; /* Very light pink or Pale Purple */
-    color: #333;
-    font-family: 'Electrolize', sans-serif;
-
-}
-
-.site-footer a {
-    color: #007bff; /* Bootstrap's default blue for links */
-    text-decoration: none; /* Optional: Removes underline from links */
-}
-
-.site-footer a:hover {
-    text-decoration: underline; /* Restores underline on hover for better usability */
-}
-
 .personality-container, .description-container {
     margin-top: 20px;
     border: 2px solid #000;
     padding: 20px;
-    background-color: #FEEAFA; /* Very light pink for consistency */
+    background-color: #FEEAFA;  
     font-family: 'Electrolize', sans-serif;
 
+    background: rgba(255, 255, 255, 0.1); /* semi-transparent white background */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* subtle white border for a glass effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* soft shadow */
+    backdrop-filter: blur(10px); /* blur effect for glassiness */
+    color: #fff; /* white text color for contrast */
+    padding: 20px; /* padding around the text */
+    border-radius: 10px; /* rounded corners */
+    box-shadow: 0 0 10px rgba(204, 123, 94, 0.5), 0 0 40px rgba(88, 137, 208, 0.5), 0 0 80px rgba(128, 167, 157, 0.5); /* multi-color glow */
+    margin-bottom: 20px;
 }
+
+.description-container h2 {
+    color: #fff; /* Dark gray for contrast */
+    margin-bottom: 10px;
+}
+
+.description-container p {
+    color: #fff; /* Medium gray for the text */
+    margin-bottom: 10px;
+    line-height: 1.6; /* Improve readability */
+}
+
+.site-footer {
+    padding: 20px 0;
+    background: linear-gradient(to right, rgba(88, 137, 208, 0.8), rgba(204, 123, 94, 0.8));
+    text-align: center;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1); /* semi-transparent white background */
+    border-top: none;
+    margin-top: 0;
+    background-color: #040404;
+}
+
+.site-footer p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #ddd; /* Light grey text for a subtle look */
+}
+
+.site-footer a {
+    color: #fc0fc0; /* Pink color links to match the neon theme */
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+    color: #ffffff;
+    box-shadow: 0 0 8px #fc0fc0;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
 
 .enable-disable-chatbot {
     font-family: 'Electrolize', sans-serif;
@@ -314,6 +357,13 @@ input[type="submit"] {
 
     /* Additional styles for small screens */
 }
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+    }
+}
+
 
 .loader {
     border: 5px solid #f3f3f3; /* Light grey */
