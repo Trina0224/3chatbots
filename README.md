@@ -61,7 +61,7 @@ node .\server.js
 4. ~Can support markdown format.~  
 5. ~Can upload a picutre.~    
 6. Can support a hyperlink.  
-7. ~Deco the html and css.~Improving...   
+7. ~Deco the html and css~  Improving...   
 8. ~Use timer to keep the discussion.~ Not Necessary.  
 9. ~white out history and hightlight current messages.~  
 10. ~Put Disable/Enable Chatbot Funcion.~  
