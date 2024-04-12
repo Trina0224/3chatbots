@@ -14,6 +14,7 @@ body, html {
     scroll-behavior: smooth;
     /*background-color: #8E9AAF;*/
     background-color: #040404;
+
 }
 
 .container {
@@ -98,7 +99,32 @@ input[type="submit"] {
     padding: 5px;
     border: 1px solid #ccc;
     resize: vertical; /* Allows vertical resizing */
+    
+    /*width: calc(100% - 20px);*/ /* Ensures the textarea fits its container, accounting for padding */
+    margin-top: 5px; /* Adds space above the textarea */
+
+    background: rgba(255, 255, 255, 0.05); /* slightly darker background for the textarea */
+    /*border: none;*/ /* remove borders */
+    color: #fff; /* white text color */
+    padding: 10px; /* padding inside the textarea */
+
+    width: 80%; /* adjust width to make textarea smaller */
+    height: 60px; /* set a fixed height */
+    margin: 10px auto; /* centering the textarea */
+    border-radius: 15px; /* rounded corners */
+    border: 2px solid transparent; /* prepares for gradient border */
+    background-clip: padding-box; /* prevents background from bleeding outside the border */
+    transition: border 0.3s, box-shadow 0.3s; /* smooth transition for focus effects */
+    box-shadow: 0 0 8px rgba(0, 174, 255, 0.3), 0 0 10px rgba(0, 174, 255, 0.8); /* white to pink shadow for neon effect */
+
 }
+#inputData:hover, #inputData:focus {
+    outline: none; /* remove outline on focus */
+    border-color: transparent; /* keep border transparent on focus and hover */
+    box-shadow: 0 0 8px #fc0fc0; /* glow effect when focused or hovered */
+}
+
+
 
 
 .input-group label {
@@ -139,7 +165,8 @@ input[type="submit"] {
 
 .landing-page {
     text-align: center;
-    background-image: url('background.webp'); 
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.0)), url('background.webp'); 
     background-size: cover;
     color: #F8F8F8; /* White text color */
     padding: 100px 20px; /* Adjust padding as needed */
@@ -149,6 +176,8 @@ input[type="submit"] {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
+
 }
 
 .landing-page h1 {
