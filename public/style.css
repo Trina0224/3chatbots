@@ -230,6 +230,16 @@ input[type="submit"] {
     border-radius: 10px; /* rounded corners */
     box-shadow: 0 0 10px rgba(204, 123, 94, 0.5), 0 0 40px rgba(88, 137, 208, 0.5), 0 0 80px rgba(128, 167, 157, 0.5); /* multi-color glow */
     margin-bottom: 20px;
+
+}
+
+.personality-container {
+
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url('personality.png'); /* Replace 'path_to_your_image.jpg' with your image path */
+    background-size: 38% auto; /* Adjusts the width to 33.33% of the container, automatically adjusting the height to maintain the aspect ratio */
+    background-repeat: no-repeat; /* Prevents the background from repeating */
+    background-position: right center; /* Positions the background image to the left and vertically centered */
+
 }
 
 .description-container h2 {
