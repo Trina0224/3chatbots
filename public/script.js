@@ -6,6 +6,7 @@ let inputsHistory = [];
 let bottomRightMessageHistory = [];
 let sortedBotsByOutputLength = [];
 let uploadedImageUrl = ""; //looks like this line is useless.
+let shouldRemoveImageOnNextSend = false; // State flag
 
 
 function toggleLabel(checkboxId, labelId, muteText, unmuteText) {
@@ -111,7 +112,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function clearImage() {
+    const imagePreview = document.getElementById('imagePreview');
+    const fileInput = document.getElementById('fileInput');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const xEmoji = imagePreviewContainer.querySelector('.x-emoji');
 
+    if (imagePreview) {
+        imagePreview.src = ''; // Clear image source
+        imagePreview.style.display = 'none'; // Hide the image
+    }
+    if (xEmoji) {
+        imagePreviewContainer.removeChild(xEmoji); // Remove the X emoji if present
+    }
+    fileInput.value = ''; // Reset the file input
+    shouldRemoveImageOnNextSend = false; // Reset the flag
+}
 
 
 
@@ -134,6 +150,12 @@ async function processAndDisplayData() {
 
     // Clear the textarea
     inputElement.value = '';
+    //04132024
+    if (shouldRemoveImageOnNextSend) {
+        clearImage(); // Call to clear the image if the flag is true
+    } else {
+        shouldRemoveImageOnNextSend = true; // Set the flag on the first send after image upload
+    }
     //04022024 bug!!! document.getElementById('linkInput').value = '';
 
     // Update the display based on the inputsHistory array
@@ -535,6 +557,7 @@ document.getElementById('fileInput').addEventListener('change', function() {
                 const previewContainer = document.getElementById('imagePreviewContainer');
                 preview.src = e.target.result; // Preview the selected image
                 preview.style.display = 'block';
+                shouldRemoveImageOnNextSend = false; // Reset the flag when a new image is uploaded
                 const base64EncodedImage = e.target.result; // This is your base64-encoded image
                 document.getElementById('linkInput').value = base64EncodedImage; // Assuming you want to use the same input to hold the base64 string
                 
@@ -545,6 +568,7 @@ document.getElementById('fileInput').addEventListener('change', function() {
                 xEmoji.textContent = '❌'; // X emoji
                 xEmoji.classList.add('x-emoji');
                 xEmoji.onclick = function() {
+                    /*
                     preview.src = ''; // Remove image source
                     preview.style.display = 'none'; // Hide the image
                     previewContainer.removeChild(xEmoji); // Remove the X emoji itself
@@ -556,6 +580,8 @@ document.getElementById('fileInput').addEventListener('change', function() {
 
                     // Optionally, hide the textarea if it's meant to be toggled with the link button
                     document.getElementById('linkInput').style.display = 'none';
+                    */
+                    clearImage();
                 };
 
                 // Append only if an X doesn't already exist

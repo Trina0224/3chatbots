@@ -51,6 +51,8 @@ node .\server.js
 03/30/2024 Fixed some issues and posted to X for sharing.  
 04/05/2024 Responsive Viewport  
 04/06/2024 index_V1.html, style_V1.css were archived.  
+04/13/2024 Almost done.  
+
 
 
 
@@ -83,9 +85,11 @@ node .\server.js
 2. Gemini has limitaion. Have to wait for the pay as you go API Key.  
 3. ~Move inputs handling to processAndDisplayData() from sendData().~
 4. ~Fix human cannot keep silent issue.~  
-5. In script.js (search 'BUG'). will fix this after I add the photo function to Gemini and Claude.  
+5. ~In script.js (search 'BUG'). will fix this after I add the photo function to Gemini and Claude.~    
 6. ~Right now, Gemini can read photo. ChatGPT can read link or photo, but the photo size is not idea. A little small. Will try to solve it later.~  
-7. how to remove the old picture?  
+7. ~how to remove the old picture?~  
+
+
 
 
 
