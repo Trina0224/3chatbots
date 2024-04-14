@@ -104,8 +104,12 @@ node .\server.js
 ## Demo  
 Personality Settings:  
 ![Demo 0](https://github.com/Trina0224/3chatbots/blob/main/pics/Screenshot%202024-04-13%20at%207.35.02%E2%80%AFPM.png)
-English:  
+
+English Discussion in one container:    
 ![Demo 1](https://github.com/Trina0224/3chatbots/blob/main/pics/Screenshot%202024-03-30%20152131.png)  
+
+English (Discussion in one container mode):  
+![English Discussion in one container]()  
 
 Chinese:    
 ![Demo 2](https://github.com/Trina0224/3chatbots/blob/main/pics/Screenshot%202024-03-26%20004357.png)
