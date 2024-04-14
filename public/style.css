@@ -24,6 +24,7 @@ body, html {
     height: 100vh;
 }
 
+
 .top-left, .top-right, .bottom-left, .bottom-right {
     width: 50vw; /* 50% of the viewport width */
     height: 50vh; /* 50% of the viewport height */
@@ -60,6 +61,11 @@ body, html {
     flex-direction: column;
     align-items: start;
 }
+
+.full-width {
+    width: 100%;
+}
+
 
 form {
     text-align: center;

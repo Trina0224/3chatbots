@@ -21,25 +21,25 @@ function toggleLabel(checkboxId, labelId, muteText, unmuteText) {
 
 // Call the function for each checkbox on page load and set event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    toggleLabel('enableChatGPT', 'labelChatGPT', 'Mute ChatGPT', 'Unmute ChatGPT');
-    toggleLabel('enableGemini', 'labelGemini', 'Mute Gemini', 'Unmute Gemini');
-    toggleLabel('enableClaude', 'labelClaude', 'Mute Claude', 'Unmute Claude');
+    toggleLabel('enableChatGPT', 'labelChatGPT', 'ChatGPT Muted', 'ChatGPT Unmuted');
+    toggleLabel('enableGemini', 'labelGemini', 'Gemini Muted', 'Gemini Unmuted');
+    toggleLabel('enableClaude', 'labelClaude', 'Claude Muted', 'Claude Unmuted');
 
     // ChatGPT
     document.getElementById('enableChatGPT').addEventListener('change', function() {
-        toggleLabel('enableChatGPT', 'labelChatGPT', 'Mute ChatGPT', 'Unmute ChatGPT');
-        toggleContainerVisibility('top-left', this.checked);
+        toggleLabel('enableChatGPT', 'labelChatGPT', 'ChatGPT Muted', 'ChatGPT Unmuted');
+        toggleContainerVisibility('top-right', this.checked);
     });
 
     // Gemini
     document.getElementById('enableGemini').addEventListener('change', function() {
-        toggleLabel('enableGemini', 'labelGemini', 'Mute Gemini', 'Unmute Gemini');
+        toggleLabel('enableGemini', 'labelGemini', 'Gemini Muted', 'Gemini Unmuted');
         toggleContainerVisibility('bottom-left', this.checked);
     });
 
     // Claude
     document.getElementById('enableClaude').addEventListener('change', function() {
-        toggleLabel('enableClaude', 'labelClaude', 'Mute Claude', 'Unmute Claude');
+        toggleLabel('enableClaude', 'labelClaude', 'Claude Muted', 'Claude Unmuted');
         toggleContainerVisibility('bottom-right', this.checked);
     });
 });
@@ -75,6 +75,7 @@ window.addEventListener('resize', checkScreenAndAdjustCheckbox);
 // Enhanced toggleDiscussionContainer function
 function toggleDiscussionContainer(isChecked) {
     const discussionContainer = document.getElementById('discussionContainer');
+    const topLeftContainer = document.querySelector('.top-left'); // Target the top-left container correctly
     // Define selectors for the containers and their corresponding checkboxes
     const containersInfo = [
         { container: '.top-right', checkbox: 'enableChatGPT' },
@@ -88,6 +89,7 @@ function toggleDiscussionContainer(isChecked) {
         containersInfo.forEach(info => {
             document.querySelector(info.container).style.display = 'none';
         });
+        topLeftContainer.classList.add('full-width'); // Make top-left container full width
     } else {
         // Hide the discussionContainer
         discussionContainer.style.display = 'none';
@@ -98,6 +100,7 @@ function toggleDiscussionContainer(isChecked) {
             // Show the container only if its corresponding checkbox is checked (unmuted)
             container.style.display = checkbox.checked ? 'block' : 'none';
         });
+        topLeftContainer.classList.remove('full-width'); // Revert top-left container to original width
     }
 }
 
