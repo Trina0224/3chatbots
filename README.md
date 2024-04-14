@@ -102,6 +102,8 @@ node .\server.js
 
 
 ## Demo  
+Personality Settings:  
+![Demo 0]()
 English:  
 ![Demo 1](https://github.com/Trina0224/3chatbots/blob/main/pics/Screenshot%202024-03-30%20152131.png)  
 
