@@ -112,10 +112,10 @@ English (Discussion in one container mode):
 ![English Discussion in one container](https://github.com/Trina0224/3chatbots/blob/main/pics/One%20Container.png)  
   
 Chinese:    
-![Demo 2](https://github.com/Trina0224/3chatbots/blob/main/pics/Screenshot%202024-03-26%20004357.png)
+![Demo 2](https://github.com/Trina0224/3chatbots/blob/main/pics/TWN.png)
 
 Japanese:  
-![Demo 3](https://github.com/Trina0224/3chatbots/blob/main/pics/Screenshot%202024-03-26%20010348.png)  
+![Demo 3](https://github.com/Trina0224/3chatbots/blob/main/pics/JAP.png)  
 
 ## Ref:  
 Gemini:[https://ai.google.dev/tutorials/get_started_node#generate-text-from-text-and-image-input]  
